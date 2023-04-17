@@ -4,13 +4,13 @@ import display
 
 def main():
     pygame.init()
-    rows = 5
-    cols = 5
+    rows = 100
+    cols = 100
     screen = pygame.display.set_mode((800, 800))
     maze = generate.generate_maze_kruskal(rows, cols)
-    cell_size = 2
+    cell_size = 1
     offset_x, offset_y =0, 0
-    zoom = 19
+    zoom = 3
     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
     running = True
     while running:

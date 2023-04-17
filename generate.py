@@ -42,7 +42,6 @@ def transform_display(rows, cols, maze):
 #                sqmaze[j][i] = 1
 
     for edge in maze:
-        print(edge)
         i1 = 2*edge[0][0] + 1
         j1 = 2*edge[0][1] + 1
         i2 = 2*edge[1][0] + 1
