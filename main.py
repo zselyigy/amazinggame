@@ -4,8 +4,11 @@ import display
 
 def main():
     pygame.init()
+    rows = 10
+    cols = 10
     screen = pygame.display.set_mode((800, 800))
-    maze = generate.generate_maze_kruskal(10, 10)
+    maze = generate.generate_maze_kruskal(rows, cols)
+    generate.transform_display(rows, cols, maze)
     cell_size = 2
     offset_x, offset_y =5, 5
     zoom = 19
