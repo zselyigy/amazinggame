@@ -21,16 +21,16 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    offset_x += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
-                elif event.key == pygame.K_RIGHT:
                     offset_x -= 1
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                elif event.key == pygame.K_RIGHT:
+                    offset_x += 1
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_UP:
-                    offset_y += 1
+                    offset_y -= 1
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_DOWN:
-                    offset_y -= 1
+                    offset_y += 1
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 2
