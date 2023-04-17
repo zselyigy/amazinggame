@@ -1,4 +1,5 @@
 import random
+import numpy
 
 def generate_maze_kruskal(rows, cols):
     grid = []
@@ -30,3 +31,26 @@ def generate_maze_kruskal(rows, cols):
             for cell in set2:
                 sets[cell] = set1
     return maze
+
+
+
+def transform_display(rows, cols, maze):
+    x = numpy.zeros((2*rows+1, 2*cols+1))
+    for i in range(2*rows+1):
+        for j in range(2*cols+1):
+            if i % 2 == 1 and j % 2 == 1:
+                x[i][j] = 1
+
+    for edge in maze:
+        i1 = 2*edge[0][0] + 1
+        j1 = 2*edge[0][1] + 1
+        i2 = 2*edge[1][0] + 1
+        j2 = 2*edge[1][1] + 1
+        if i1 == i2:
+            j = (j1 + j2) // 2
+            x[i1][j] = 1
+        else:
+            i = (i1 + i2) // 2
+            x[i][j1] = 1
+
+
