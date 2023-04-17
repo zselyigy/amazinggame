@@ -1,6 +1,6 @@
 import random
 
-def generate_maze(rows, cols):
+def generate_maze_kruskal(rows, cols):
     grid = []
     for i in range(rows):
         row = []

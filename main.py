@@ -5,9 +5,9 @@ import display
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 800))
-    maze = generate.generate_maze(10, 10)
+    maze = generate.generate_maze_kruskal(10, 10)
     cell_size = 2
-    offset_x, offset_y = 0, 0
+    offset_x, offset_y =5, 5
     zoom = 19
     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
     running = True
