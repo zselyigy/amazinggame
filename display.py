@@ -1,4 +1,5 @@
 import pygame
+import generate
 
 def draw_maze(maze, screen, cell_size, offset_x, offset_y, zoom):
     for edge in maze:
@@ -36,8 +37,30 @@ def draw_maze(maze, screen, cell_size, offset_x, offset_y, zoom):
 
             pygame.display.flip()
 
+def draw_sqmaze(sqmaze, screen, cell_size, offset_x, offset_y, zoom, rows, cols):
+#     path_width = max(1, int(cell_size*zoom//2))
+    path_width = cell_size*zoom
+    print(path_width)
+    print(sqmaze)
+    for i in range(2*rows+1):
+        for j in range(2*cols+1):
 
-def draw(maze, screen, cell_size, offset_x, offset_y, zoom):
+        # Add offsets to starting and ending points
+
+        # Check if the edge is on the border of the maze
+#        if x1 == 0 or y1 == 0 or x2 == 0 or y2 == 0 or x1 == len(maze)-1 or y1 == len(maze[0])-1 or x2 == len(maze)-1 or y2 == len(maze[0])-1:
+            if  sqmaze[j][i] == 1:
+            # Draw white path
+                pygame.draw.line(screen, (255, 255, 255),
+                                (i * cell_size * zoom, j * cell_size  * zoom),
+                                (i * cell_size  * zoom, ((j+1) * cell_size ) * zoom-1),
+                                path_width)
+
+            pygame.display.flip()
+
+def draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols):
     screen.fill((0, 0, 0))
-    draw_maze(maze, screen, cell_size, offset_x, offset_y, zoom)
+    sqmaze = generate.transform_display(rows, cols, maze)
+#    draw_maze(maze, screen, cell_size, offset_x, offset_y, zoom)
+    draw_sqmaze(sqmaze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
     pygame.display.flip()

@@ -4,15 +4,14 @@ import display
 
 def main():
     pygame.init()
-    rows = 10
-    cols = 10
+    rows = 5
+    cols = 5
     screen = pygame.display.set_mode((800, 800))
     maze = generate.generate_maze_kruskal(rows, cols)
-    generate.transform_display(rows, cols, maze)
     cell_size = 2
-    offset_x, offset_y =5, 5
+    offset_x, offset_y =0, 0
     zoom = 19
-    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
     running = True
     while running:
         for event in pygame.event.get():
@@ -21,22 +20,22 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     offset_x += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_RIGHT:
                     offset_x -= 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_UP:
                     offset_y += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_DOWN:
                     offset_y -= 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 2
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 2)
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
     pygame.quit()
 
 
