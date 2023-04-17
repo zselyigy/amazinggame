@@ -5,8 +5,8 @@ import display
 def main():
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
-    rows = 100
-    cols = 100
+    rows = 10
+    cols = 10
     screen = pygame.display.set_mode((800, 800))
     maze = generate.generate_maze_kruskal(rows, cols)
     cell_size = 1
@@ -14,6 +14,7 @@ def main():
     zoom = 3
     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
     running = True
+    pygame.key.set_repeat(200, 10)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
