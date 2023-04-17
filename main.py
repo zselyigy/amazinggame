@@ -4,6 +4,7 @@ import display
 
 def main():
     pygame.init()
+    pygame.display.set_caption('The Wonder of Mazes')
     rows = 100
     cols = 100
     screen = pygame.display.set_mode((800, 800))
@@ -35,7 +36,7 @@ def main():
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 2)
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)                  
     pygame.quit()
 
 
