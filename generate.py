@@ -9,9 +9,7 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
     if seed_enabled:
         # Set a fixed seed
         random.seed(seed)
-        # Generate a random integer between 1 and 10
-        random_number = random.randint(1, 10)
-        print(random_number)
+
     else:
         seed = int(time.time())
         random.seed(seed)
