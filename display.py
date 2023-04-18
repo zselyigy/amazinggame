@@ -62,6 +62,7 @@ def draw_sqmaze(sqmaze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                         cell_size * zoom,
                         cell_size * zoom))
 
+
 def draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols):
     screen.fill((0, 0, 0))
     sqmaze = generate.transform_display(rows, cols, maze)
