@@ -33,7 +33,7 @@ def main():
                     offset_y += 1
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
-                    zoom += 2
+                    zoom += 1
                     display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 2)
