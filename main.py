@@ -5,10 +5,10 @@ import display
 def main():
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
-    rows = 10
+    rows = 25
     cols = 10
-    seed_enabled = True
-    seed = 1681843986
+    seed_enabled = False
+    seed = 1681844304
     screen = pygame.display.set_mode((800, 800))
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
     cell_size = 1

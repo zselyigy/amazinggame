@@ -62,12 +62,12 @@ def transform_display(rows, cols, maze):
         j2 = 2*edge[1][1] + 1
         if i1 == i2:
 #            j = (j1 + j2) // 2
-            sqmaze[j1][i1] = 1
-            sqmaze[j1+1][i1] = 1
-            sqmaze[j2][i1] = 1
+            sqmaze[i1][j1] = 1
+            sqmaze[i1][j1+1] = 1
+            sqmaze[i1][j2] = 1
         else:
 #            i = (i1 + i2) // 2
-            sqmaze[j1][i1] = 1
-            sqmaze[j1][i1+1] = 1
-            sqmaze[j1][i2] = 1
+            sqmaze[i1][j1] = 1
+            sqmaze[i1+1][j1] = 1
+            sqmaze[i2][j1] = 1
     return sqmaze

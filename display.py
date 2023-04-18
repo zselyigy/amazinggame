@@ -47,14 +47,14 @@ def draw_sqmaze(sqmaze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
 
         # Check if the edge is on the border of the maze
 #        if x1 == 0 or y1 == 0 or x2 == 0 or y2 == 0 or x1 == len(maze)-1 or y1 == len(maze[0])-1 or x2 == len(maze)-1 or y2 == len(maze[0])-1:
-            if  sqmaze[j][i] == 1:
+            if  sqmaze[i][j] == 1:
             # Draw white path
                 pygame.draw.line(screen, (255, 255, 255),
                                 ((i+offset_x) * cell_size * zoom, (j+offset_y) * cell_size  * zoom),
                                 ((i+offset_x) * cell_size  * zoom, ((j+offset_y+1) * cell_size ) * zoom-1),
                                 path_width)
                 
-            if sqmaze[j][i] == 2:
+            if sqmaze[i][j] == 2:
     # Draw red square
                 pygame.draw.rect(screen, (255, 0, 0),
                         ((i+offset_x) * cell_size * zoom,
