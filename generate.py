@@ -9,7 +9,6 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
     if seed_enabled:
         # Set a fixed seed
         random.seed(seed)
-
     else:
         seed = int(time.time())
         random.seed(seed)
@@ -50,11 +49,6 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
 
 def transform_display(rows, cols, maze):
     sqmaze = numpy.zeros((2*rows+1, 2*cols+1))
-#    for i in range(2*rows+1):
-#        for j in range(2*cols+1):
-#            if i % 2 == 1 and j % 2 == 1:
-#                sqmaze[j][i] = 1
-
     for edge in maze:
         i1 = 2*edge[0][0] + 1
         j1 = 2*edge[0][1] + 1

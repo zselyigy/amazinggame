@@ -5,7 +5,7 @@ import display
 def main():
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
-    rows = 25
+    rows = 10
     cols = 10
     seed_enabled = False
     seed = 1681844304
