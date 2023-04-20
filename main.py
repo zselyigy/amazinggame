@@ -92,8 +92,8 @@ def main():
                     zoom += 1
                     display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
-                    zoom = max(1, zoom - 2)
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons, zoom)
+                    zoom = max(1, zoom - 1)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
