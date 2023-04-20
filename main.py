@@ -4,6 +4,7 @@ import display
 import random
 import pygame
 import numpy
+import os
 
 
 
@@ -48,6 +49,15 @@ def display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, 
     button_draw(screen, buttons)
     zoomlevel_diplay(screen,zoom)
     pygame.display.flip()
+
+
+def endgame_diplay(screen):
+    font = pygame.font.SysFont(None, 40)
+    rect = pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//2)
+    pygame.draw.rect(screen, (150, 00, 00), rect)
+    text_surf = font.render('Congratulation! You won!', True, (10, 10, 10))
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
 
 def main():
 #Initialize pygame
@@ -165,7 +175,7 @@ def main():
                             sqmaze[mazex][mazey] = 2
                             display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                             if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
-                                screen.blit(startscreenpic, (0, 0))
+                                endgame_diplay(screen)
                                 pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:
                         if pathmaze[mazex][mazey] == 1:
