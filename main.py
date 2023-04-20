@@ -54,6 +54,7 @@ def main():
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
     screen = pygame.display.set_mode((800, 800))
+# setting up the start screen
     startscreenpic = pygame.image.load(".\\retek.jpg")
     screen.blit(startscreenpic, (0, 0))
     startscreen_buttons = []
@@ -61,13 +62,14 @@ def main():
     for button in startscreen_buttons:
         button.draw(screen)
     pygame.display.flip()
-
+# event loop for the start screen
     running = True
     pygame.key.set_repeat(200, 10)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+# game starts by key s or clicking the start button
 # keydown events
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
@@ -86,12 +88,13 @@ def main():
     seed = 1681844304
     offset_x, offset_y =0, 0
     zoom = 3
+#Generate maze
+    maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
+# setting up the start ingame screen
     buttons = []
     buttons.append(Button('Zoom In', 690, 50, 100, 30))
     buttons.append(Button('Zoom Out', 690, 90, 100, 30))
     buttons.append(Button('Quit', 690, 130, 100, 30))
-#Generate maze
-    maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
 #Draw maze on screen
     display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 #Handle pygame events
