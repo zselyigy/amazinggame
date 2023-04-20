@@ -33,6 +33,19 @@ def button_draw(screen, buttons):
         for button in buttons:
             button.draw(screen)
 
+def zoomlevel_diplay(screen,zoom_level):
+    font = pygame.font.SysFont(None, 20)
+    rect = pygame.Rect(690, 10, 100, 30)
+    pygame.draw.rect(screen, (50, 50, 50), rect)
+    text_surf = font.render('Zoom level: ' + str(zoom_level), True, (255, 255, 255))
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
+def display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
+    button_draw(screen, buttons)
+    zoomlevel_diplay(screen,zoom)
+    pygame.display.flip()
 
 def main():
 #Initialize pygame
@@ -53,9 +66,7 @@ def main():
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
 #Draw maze on screen
-    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-    button_draw(screen, buttons)
-    pygame.display.flip()
+    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 #Handle pygame events
     running = True
     pygame.key.set_repeat(200, 10)
@@ -67,43 +78,33 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     offset_x -= 1
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_RIGHT:
                     offset_x += 1
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_UP:
                     offset_y -= 1
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_DOWN:
                     offset_y += 1
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 1
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 2)
-                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                    button_draw(screen, buttons)
+                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons, zoom)
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
 
             if buttons[0].clicked:
                 zoom += 1
-                display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                button_draw(screen, buttons)
-                pygame.display.flip()
+                display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
             if buttons[1].clicked:
-                zoom = max(1, zoom - 2)
-                display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
-                button_draw(screen, buttons)
-                pygame.display.flip()
+                zoom = max(1, zoom - 1)
+                display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
 
 
