@@ -164,6 +164,9 @@ def main():
                             pathmaze[mazex][mazey] = 1
                             sqmaze[mazex][mazey] = 2
                             display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                            if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                screen.blit(startscreenpic, (0, 0))
+                                pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:
                         if pathmaze[mazex][mazey] == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
