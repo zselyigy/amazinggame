@@ -51,6 +51,8 @@ def main():
 #Initialize pygame
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
+# Use this to set full screen
+#     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
     screen = pygame.display.set_mode((800, 800))
     startscreen = pygame.image.load(".\\retek.jpg")
 #Define variables needed
@@ -63,6 +65,7 @@ def main():
     buttons = []
     buttons.append(Button('Zoom In', 690, 50, 100, 30))
     buttons.append(Button('Zoom Out', 690, 90, 100, 30))
+    buttons.append(Button('Quit', 690, 130, 100, 30))
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
 #Draw maze on screen
@@ -106,6 +109,8 @@ def main():
                 zoom = max(1, zoom - 1)
                 display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
+            if buttons[2].clicked:
+                running = False
 
 
     pygame.quit()
