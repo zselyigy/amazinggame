@@ -136,7 +136,9 @@ def main():
                     if sqmaze[mazex][mazey] == 1:
                         sqmaze[mazex][mazey] = 2
                         display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
-                
+                    elif sqmaze[mazex][mazey] == 2:
+                            sqmaze[mazex][mazey] = 1
+                            display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
