@@ -53,14 +53,16 @@ def main():
     pygame.display.set_caption('The Wonder of Mazes')
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-    window_width=800
-    window_height=800
+#    window_width=800
+#    window_height=800
+    window_width=pygame.display.Info().current_w
+    window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
     startscreenpic = pygame.image.load(".\\retek.jpg")
     screen.blit(startscreenpic, (0, 0))
     startscreen_buttons = []
-    startscreen_buttons.append(Button('Start game', (window_height-100)/2, (window_width-30)/2, 100, 30))
+    startscreen_buttons.append(Button('Start game', (window_width-100)/2, (window_height-30)/2, 100, 30))
     for button in startscreen_buttons:
         button.draw(screen)
     pygame.display.flip()
