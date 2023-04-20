@@ -1,7 +1,7 @@
 import pygame
 import generate
 import display
-
+import random
 import pygame
 
 
@@ -88,13 +88,27 @@ def main():
 #Define variables needed
     rows = 10
     cols = 10
-    seed_enabled = False
+    seed_enabled = True
     seed = 1681844304
     offset_x, offset_y =0, 0
     zoom = 3
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
-    sqmaze = generate.transform_display(rows, cols, maze)
+    sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
+    something = True
+    while something:
+        startpos = random.randint(1, 2 * rows)
+        if  sqmaze[1][startpos] == 1:
+            sqmaze[1][startpos] = 3
+            something = False
+
+    something = True
+    while something:
+        endpos = random.randint(1, 2 * rows)
+        if  sqmaze[2 * cols - 1][endpos] == 1:
+            sqmaze[2 * cols - 1][endpos] = 4
+            something = False
+
 # setting up the start ingame screen
     buttons = []
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-110,50, 100, 30))
