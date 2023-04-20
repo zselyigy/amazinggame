@@ -45,7 +45,6 @@ def main():
     cols = 10
     seed_enabled = False
     seed = 1681844304
-    cell_size = 1
     offset_x, offset_y =0, 0
     zoom = 3
     buttons = []
@@ -54,7 +53,7 @@ def main():
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
 #Draw maze on screen
-    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
     button_draw(screen, buttons)
     pygame.display.flip()
 #Handle pygame events
@@ -68,27 +67,27 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     offset_x -= 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
                 elif event.key == pygame.K_RIGHT:
                     offset_x += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
                 elif event.key == pygame.K_UP:
                     offset_y -= 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
                 elif event.key == pygame.K_DOWN:
                     offset_y += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 1
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 2)
-                    display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                     button_draw(screen, buttons)
 # screen button events                    
             for button in buttons:
@@ -96,13 +95,13 @@ def main():
 
             if buttons[0].clicked:
                 zoom += 1
-                display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                 button_draw(screen, buttons)
                 pygame.display.flip()
 
             if buttons[1].clicked:
                 zoom = max(1, zoom - 2)
-                display.draw(maze, screen, cell_size, offset_x, offset_y, zoom, rows, cols)
+                display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
                 button_draw(screen, buttons)
                 pygame.display.flip()
 
