@@ -54,7 +54,31 @@ def main():
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
     screen = pygame.display.set_mode((800, 800))
-    startscreen = pygame.image.load(".\\retek.jpg")
+    startscreenpic = pygame.image.load(".\\retek.jpg")
+    screen.blit(startscreenpic, (0, 0))
+    startscreen_buttons = []
+    startscreen_buttons.append(Button('Start game', 350, 350, 100, 30))
+    for button in startscreen_buttons:
+        button.draw(screen)
+    pygame.display.flip()
+
+    running = True
+    pygame.key.set_repeat(200, 10)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+# keydown events
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    running = False
+# screen button events                    
+            for button in startscreen_buttons:
+                button.handle_event(event)
+
+            if startscreen_buttons[0].clicked:
+                running = False
+
 #Define variables needed
     rows = 10
     cols = 10
