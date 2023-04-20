@@ -88,8 +88,8 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 10
-    cols = 10
+    rows = 5
+    cols = 7
     seed_enabled = False
     seed = 1681844304
     offset_x, offset_y =0, 0
@@ -100,7 +100,7 @@ def main():
     pathmaze = numpy.zeros((2*rows+1, 2*cols+1))
     something = True
     while something:
-        startpos = random.randint(1, 2 * rows)
+        startpos = random.randint(1, 2 * cols)
         if  sqmaze[1][startpos] == 1:
             sqmaze[1][startpos] = 3
             pathmaze[1][startpos] = 1
@@ -108,9 +108,9 @@ def main():
 
     something = True
     while something:
-        endpos = random.randint(1, 2 * rows)
-        if  sqmaze[2 * cols - 1][endpos] == 1:
-            sqmaze[2 * cols - 1][endpos] = 4
+        endpos = random.randint(1, 2 * cols)
+        if  sqmaze[2 * rows - 1][endpos] == 1:
+            sqmaze[2 * rows - 1][endpos] = 4
             something = False
 
 # setting up the start ingame screen
