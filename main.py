@@ -3,6 +3,8 @@ import generate
 import display
 import random
 import pygame
+import numpy
+
 
 
 class Button:
@@ -88,18 +90,20 @@ def main():
 #Define variables needed
     rows = 10
     cols = 10
-    seed_enabled = True
+    seed_enabled = False
     seed = 1681844304
     offset_x, offset_y =0, 0
     zoom = 3
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
     sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
+    pathmaze = numpy.zeros((2*rows+1, 2*cols+1))
     something = True
     while something:
         startpos = random.randint(1, 2 * rows)
         if  sqmaze[1][startpos] == 1:
             sqmaze[1][startpos] = 3
+            pathmaze[1][startpos] = 1
             something = False
 
     something = True
@@ -148,9 +152,29 @@ def main():
                 mazey = int((event.pos[1]) // zoom - offset_y)
                 if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
                     if sqmaze[mazex][mazey] == 1:
-                        sqmaze[mazex][mazey] = 2
-                        display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                        if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
+                            if pathmaze[mazex - 1][mazey] > 0:
+                                pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
+                            if pathmaze[mazex + 1][mazey] > 0:
+                                pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] + 1
+                            if pathmaze[mazex][mazey - 1] > 0:
+                                pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] + 1
+                            if pathmaze[mazex][mazey + 1] > 0:
+                                pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] + 1
+                            pathmaze[mazex][mazey] = 1
+                            sqmaze[mazex][mazey] = 2
+                            display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                     elif sqmaze[mazex][mazey] == 2:
+                        if pathmaze[mazex][mazey] == 1:
+                            if pathmaze[mazex - 1][mazey] > 0:
+                                pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] - 1
+                            if pathmaze[mazex + 1][mazey] > 0:
+                                pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] - 1
+                            if pathmaze[mazex][mazey - 1] > 0:
+                                pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] - 1
+                            if pathmaze[mazex][mazey + 1] > 0:
+                                pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
+                            pathmaze[mazex][mazey] = 0
                             sqmaze[mazex][mazey] = 1
                             display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 # screen button events                    

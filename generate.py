@@ -47,7 +47,7 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
 
 
 
-def transform_display(rows, cols, maze):
+def transform_display(rows, cols, maze, seed, seed_enabled):
     sqmaze = numpy.zeros((2*rows+1, 2*cols+1))
     for edge in maze:
         i1 = 2*edge[0][0] + 1
