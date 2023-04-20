@@ -35,14 +35,14 @@ def button_draw(screen, buttons):
 
 def zoomlevel_diplay(screen,zoom_level):
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(690, 10, 100, 30)
+    rect = pygame.Rect(pygame.display.Info().current_w-110, 10, 100, 30)
     pygame.draw.rect(screen, (50, 50, 50), rect)
     text_surf = font.render('Zoom level: ' + str(zoom_level), True, (255, 255, 255))
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
-def display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
-    display.draw(maze, screen, offset_x, offset_y, zoom, rows, cols)
+def display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    display.draw(sqmaze, screen, offset_x, offset_y, zoom, rows, cols)
     button_draw(screen, buttons)
     zoomlevel_diplay(screen,zoom)
     pygame.display.flip()
@@ -53,10 +53,10 @@ def main():
     pygame.display.set_caption('The Wonder of Mazes')
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-#    window_width=800
-#    window_height=800
-    window_width=pygame.display.Info().current_w
-    window_height=pygame.display.Info().current_h
+    window_width=800
+    window_height=800
+#    window_width=pygame.display.Info().current_w
+#    window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
     startscreenpic = pygame.image.load(".\\retek.jpg")
@@ -94,13 +94,14 @@ def main():
     zoom = 3
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
+    sqmaze = generate.transform_display(rows, cols, maze)
 # setting up the start ingame screen
     buttons = []
-    buttons.append(Button('Zoom In', 690, 50, 100, 30))
-    buttons.append(Button('Zoom Out', 690, 90, 100, 30))
-    buttons.append(Button('Quit', 690, 130, 100, 30))
+    buttons.append(Button('Zoom In', pygame.display.Info().current_w-110,50, 100, 30))
+    buttons.append(Button('Zoom Out',pygame.display.Info().current_w-110, 90, 100, 30))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-110, 130, 100, 30))
 #Draw maze on screen
-    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 #Handle pygame events
     running = True
     pygame.key.set_repeat(200, 10)
@@ -112,33 +113,41 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     offset_x -= 1
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_RIGHT:
                     offset_x += 1
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_UP:
                     offset_y -= 1
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_DOWN:
                     offset_y += 1
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 1
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
-                    display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mazex = int((event.pos[0] + zoom / 2) // zoom - offset_x)
+                mazey = int((event.pos[1]) // zoom - offset_y)
+                if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
+                    if sqmaze[mazex][mazey] == 1:
+                        sqmaze[mazex][mazey] = 2
+                        display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
 
             if buttons[0].clicked:
                 zoom += 1
-                display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
             if buttons[1].clicked:
                 zoom = max(1, zoom - 1)
-                display_ingame_screen(maze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
             if buttons[2].clicked:
                 running = False

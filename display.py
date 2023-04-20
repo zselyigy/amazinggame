@@ -41,15 +41,13 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
                 
             if sqmaze[i][j] == 2:
     # Draw red square
-                pygame.draw.rect(screen, (255, 0, 0),
-                        ((i+offset_x) * zoom,
-                        (j+offset_y) * zoom,
-                        zoom,
-                        zoom))
+                pygame.draw.line(screen, (255, 0, 0),
+                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
+                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
+                                path_width)
 
 
-def draw(maze, screen,  offset_x, offset_y, zoom, rows, cols):
+def draw(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
     screen.fill((0, 0, 0))
-    sqmaze = generate.transform_display(rows, cols, maze)
     draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols)
     pygame.display.flip()
