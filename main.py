@@ -59,6 +59,14 @@ def endgame_diplay(screen):
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
+def reset(rows, cols, sqmaze, pathmaze, startpos):
+    for i in range(2*rows+1):
+        for j in range(2*cols+1):
+            if sqmaze[i][j] == 2:
+                sqmaze[i][j] = 1
+            pathmaze[i][j] = 0
+    pathmaze[1][startpos] = 1
+
 def main():
 #Initialize pygame
     pygame.init()
@@ -125,7 +133,8 @@ def main():
     buttons = []
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-110,50, 100, 30))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-110, 90, 100, 30))
-    buttons.append(Button('Quit',pygame.display.Info().current_w-110, 130, 100, 30))
+    buttons.append(Button('Restart',pygame.display.Info().current_w-110, 130, 100, 30))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-110, 170, 100, 30))
 #Draw maze on screen
     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 #Handle pygame events
@@ -206,6 +215,10 @@ def main():
                 display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
 
             if buttons[2].clicked:
+                reset(rows, cols, sqmaze, pathmaze, startpos)
+                display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+
+            if buttons[3].clicked:
                 running = False
 
 
