@@ -71,8 +71,6 @@ def main():
 #    window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
-    startscreenpic = pygame.image.load(".\\retek.jpg")
-    screen.blit(startscreenpic, (0, 0))
     startscreen_buttons = []
     startscreen_buttons.append(Button('Start game', (window_width-100)/2, (window_height-30)/2, 100, 30))
     for button in startscreen_buttons:
@@ -99,7 +97,7 @@ def main():
 
 #Define variables needed
     rows = 5
-    cols = 7
+    cols = 5
     seed_enabled = False
     seed = 1681844304
     offset_x, offset_y =0, 0
@@ -175,6 +173,11 @@ def main():
                             sqmaze[mazex][mazey] = 2
                             display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                             if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                for i in range(2*rows+1):
+                                    for j in range(2*cols+1):
+                                        if sqmaze[i][j] == 2:
+                                            sqmaze[i][j] = 5
+                                display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                                 endgame_diplay(screen)
                                 pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:
