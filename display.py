@@ -60,6 +60,11 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
                                 ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
                                 path_width)
+            if sqmaze[i][j] == 6:
+                pygame.draw.line(screen, (255, 150, 0),
+                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
+                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
+                                path_width)
 
 
 def draw(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
