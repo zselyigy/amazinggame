@@ -3,6 +3,6 @@ def global_init():
     path = (255, 255, 255)
     sel_path = (255, 0, 0)
     start_c = (0, 255, 0)
-    end_c = (0, 255, 0)
+    end_c = (0, 0, 255)
     fin_path = (173, 216, 230)
     alg_s = (255, 150, 0)
