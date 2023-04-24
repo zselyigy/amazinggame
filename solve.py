@@ -5,7 +5,8 @@ import time
 def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
     # Define the heuristic function
     def heuristic(node):
-        return abs(node[0] - end[0]) + abs(node[1] - end[1])
+#        return abs(node[0] - end[0]) + abs(node[1] - end[1])
+        return (abs(node[0] - end[0]))^2 + (abs(node[1] - end[1]))^2
 
     # Find start and end points
     for i in range(len(sqmaze)):

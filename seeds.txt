@@ -2,3 +2,6 @@
 1682277489 - fast solve
 25*25 seed:
 1682349809 - látványos
+100*100 seed:
+1682354910 - nehéz
+1682355278 - very hard

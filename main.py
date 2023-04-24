@@ -141,7 +141,7 @@ def main():
     rows = 100
     cols = 100
     seed_enabled = False
-    seed = 2
+    seed = 1682355278
     offset_x, offset_y =0, 0
     zoom = 3
 
