@@ -40,26 +40,30 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
                                 path_width)
                 
             if sqmaze[i][j] == 2:
-    # Draw red square
+            # Draw red path
                 pygame.draw.line(screen, (255, 0, 0),
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
                                 ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
                                 path_width)
+            # Draw start
             if sqmaze[i][j] == 3:
                 pygame.draw.line(screen, (0, 255, 0),
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
                                 ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
                                 path_width)
+            # Draw end
             if sqmaze[i][j] == 4:
                 pygame.draw.line(screen, (0, 0, 255),
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
                                 ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
                                 path_width)
+            # Draw finished path
             if sqmaze[i][j] == 5:
                 pygame.draw.line(screen, (173, 216, 230),
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
                                 ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
                                 path_width)
+            # Draw algorithm search
             if sqmaze[i][j] == 6:
                 pygame.draw.line(screen, (255, 150, 0),
                                 ((i+offset_x) *  zoom, (j+offset_y) * zoom),
@@ -70,4 +74,3 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
 def draw(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
     screen.fill((0, 0, 0))
     draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols)
-    pygame.display.flip()
