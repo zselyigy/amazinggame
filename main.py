@@ -5,6 +5,7 @@ import random
 import pygame
 import numpy
 import solve
+import globals
 
 class Button:
     def __init__(self, text, x, y, width, height):
@@ -78,6 +79,7 @@ def reset(rows, cols, sqmaze, pathmaze, startpos):
     pathmaze[1][startpos] = 1
 
 def main():
+    globals.global_init()
 #Initialize pygame
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
@@ -114,12 +116,13 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 25
-    cols = 25
+    rows = 100
+    cols = 100
     seed_enabled = False
     seed = 2
     offset_x, offset_y =0, 0
     zoom = 3
+
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
     sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
