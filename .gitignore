@@ -1,9 +1,7 @@
 .vscode/settings.json
-__pycache__/display.cpython-310.pyc
-__pycache__/generate_maze.cpython-310.pyc
-__pycache__/generate.cpython-310.pyc
-main2.py
-main.py
 .gitignore
-__pycache__/solve.cpython-310.pyc
+__pycache__/display.cpython-310.pyc
+__pycache__/generate.cpython-310.pyc
+__pycache__/globals.cpython-310.pyc
 __pycache__/main.cpython-310.pyc
+__pycache__/solve.cpython-310.pyc
