@@ -144,6 +144,7 @@ def main():
     seed = 1682355278
     offset_x, offset_y =0, 0
     zoom = 3
+    enabled = 1
 
 #Generate maze
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
@@ -254,7 +255,7 @@ def main():
                 reset(rows, cols, sqmaze, pathmaze, startpos)
                 display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
 
-            if buttons[3].clicked:
+            if buttons[3].clicked and enabled == 1:
                 reset(rows, cols, sqmaze, pathmaze, startpos)
                 solution = solve.GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 for so in solution:
@@ -264,6 +265,7 @@ def main():
                 display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
                 endgame_display_solved(screen)
                 pygame.display.flip()
+                enabled = 0
 
             if buttons[4].clicked:
                 running = False
