@@ -1,5 +1,5 @@
 import pygame
-import generate
+import globals
 
 def draw_maze(maze, screen, offset_x, offset_y, zoom):
     for edge in maze:
@@ -32,44 +32,24 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
     path_width = zoom
     for i in range(2*rows+1):
         for j in range(2*cols+1):
-            if  sqmaze[i][j] == 1:
-            # Draw white path
-                pygame.draw.line(screen, (255, 255, 255),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-                
+            color = (0, 0, 0)
+            if sqmaze[i][j] == 1:
+                color = globals.path          
             if sqmaze[i][j] == 2:
-            # Draw red path
-                pygame.draw.line(screen, (255, 0, 0),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-            # Draw start
+                color = globals.sel_path
             if sqmaze[i][j] == 3:
-                pygame.draw.line(screen, (0, 255, 0),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-            # Draw end
+                color = globals.start_c
             if sqmaze[i][j] == 4:
-                pygame.draw.line(screen, (0, 0, 255),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-            # Draw finished path
+                color = globals.end_c
             if sqmaze[i][j] == 5:
-                pygame.draw.line(screen, (173, 216, 230),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-            # Draw algorithm search
+                color = globals.fin_path
             if sqmaze[i][j] == 6:
-                pygame.draw.line(screen, (255, 150, 0),
-                                ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                                ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
-                                path_width)
-
+                color = globals.alg_s
+            if color != (0, 0, 0):
+                pygame.draw.line(screen, color,
+                    ((i+offset_x) *  zoom, (j+offset_y) * zoom),
+                    ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
+                    path_width)
 
 def draw(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
     screen.fill((0, 0, 0))
