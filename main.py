@@ -100,6 +100,27 @@ def reset(rows, cols, sqmaze, pathmaze, startpos):
             pathmaze[i][j] = 0
     pathmaze[1][startpos] = 1
 
+def generate_maze(rows, cols, seed, seed_enabled):
+    maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
+    sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
+    pathmaze = numpy.zeros((2*rows+1, 2*cols+1))
+    something = True
+    while something:
+        startpos = random.randint(1, 2 * cols)
+        if  sqmaze[1][startpos] == 1:
+            sqmaze[1][startpos] = 3
+            pathmaze[1][startpos] = 1
+            something = False
+
+    something = True
+    while something:
+        endpos = random.randint(1, 2 * cols)
+        if  sqmaze[2 * rows - 1][endpos] == 1:
+            sqmaze[2 * rows - 1][endpos] = 4
+            something = False
+    return sqmaze, pathmaze, startpos, endpos
+
+
 def main():
     globals.global_init()
 #Initialize pygame
@@ -138,8 +159,8 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 100
-    cols = 100
+    rows = 10
+    cols = 10
     seed_enabled = False
     seed = 1682355278
     offset_x, offset_y =0, 0
@@ -147,31 +168,15 @@ def main():
     enabled = 1
 
 #Generate maze
-    maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
-    sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
-    pathmaze = numpy.zeros((2*rows+1, 2*cols+1))
-    something = True
-    while something:
-        startpos = random.randint(1, 2 * cols)
-        if  sqmaze[1][startpos] == 1:
-            sqmaze[1][startpos] = 3
-            pathmaze[1][startpos] = 1
-            something = False
-
-    something = True
-    while something:
-        endpos = random.randint(1, 2 * cols)
-        if  sqmaze[2 * rows - 1][endpos] == 1:
-            sqmaze[2 * rows - 1][endpos] = 4
-            something = False
-
+    sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
 # setting up the start ingame screen
     buttons = []
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-110,50, 100, 30))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-110, 90, 100, 30))
     buttons.append(Button('Restart',pygame.display.Info().current_w-110, 130, 100, 30))
     buttons.append(Button('Solve',pygame.display.Info().current_w-110, 170, 100, 30))
-    buttons.append(Button('Quit',pygame.display.Info().current_w-110, 210, 100, 30))
+    buttons.append(Button('Re-generate',pygame.display.Info().current_w-110, 210, 100, 30))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-110, 250, 100, 30))
 #Draw maze on screen
     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0)
 #Handle pygame events
@@ -268,6 +273,12 @@ def main():
                 enabled = 0
 
             if buttons[4].clicked:
+                sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
+                display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0)
+                enabled = 1
+
+
+            if buttons[5].clicked:
                 running = False
 
 
