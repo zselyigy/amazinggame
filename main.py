@@ -78,10 +78,10 @@ def display_mazecell(screen, offset_x, offset_y, zoom, i, j, sqmaze):
         color = globals.alg_s
     if color != (0, 0, 0):
         pygame.draw.line(screen, color,
-            ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-            ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
+            ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y + globals.centre_y) * zoom),
+            ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y+1 + globals.centre_y) * zoom-1),
             zoom)
-    update_rect = pygame.Rect((i+offset_x) *  zoom-(((zoom/3)+(zoom-1)/5)-1), (j+offset_y) * zoom, zoom+((zoom/3)+(zoom-1)/5), zoom)
+    update_rect = pygame.Rect((i+offset_x + globals.centre_x) *  zoom-(((zoom/3)+(zoom-1)/5)-1), (j+offset_y + globals.centre_y) * zoom, zoom+((zoom/3)+(zoom-1)/5), zoom)
     pygame.display.update(update_rect)
 
 def endgame_display(screen):
