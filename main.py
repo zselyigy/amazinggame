@@ -172,12 +172,14 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 10
-    cols = 10
-    seed_enabled = True
+    rows = 25
+    cols = 25
+    seed_enabled = False
     seed = 1682355278
-    offset_x, offset_y =0, 0
-    zoom = 3
+    zoom = pygame.display.Info().current_h // (2 * rows + 1)
+    globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
+    globals.centre_x = ((pygame.display.Info().current_w // zoom // 2) - cols)
+    offset_x, offset_y = 0, 0
     solver = 0
     solver_text = 'GBFS'
 
@@ -217,13 +219,17 @@ def main():
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 1
+                    globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
+                    globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
+                    globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
+                    globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mazex = int((event.pos[0] + zoom / 2) // zoom - offset_x)
-                mazey = int((event.pos[1]) // zoom - offset_y)
+                mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
+                mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
                 if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
                     if sqmaze[mazex][mazey] == 1:
                         if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:

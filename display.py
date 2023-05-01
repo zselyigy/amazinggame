@@ -1,16 +1,16 @@
 import pygame
 import globals
 
-def draw_maze(maze, screen, offset_x, offset_y, zoom):
+def draw_maze(maze, screen, offset_x, offset_y, zoom, centre_x, centre_y):
     for edge in maze:
         x1, y1 = edge[0][1], edge[0][0]
         x2, y2 = edge[1][1], edge[1][0]
 
         # Add offsets to starting and ending points
-        x1 += offset_x
-        y1 += offset_y
-        x2 += offset_x
-        y2 += offset_y
+        x1 += offset_x + centre_x
+        y1 += offset_y + centre_y
+        x2 += offset_x + centre_x
+        y2 += offset_y + centre_y
         if not (x1 == 0 or y1 == 0 or x2 == 0 or y2 == 0 or x1 == len(maze)-1 or y1 == len(maze[0])-1 or x2 == len(maze)-1 or y2 == len(maze[0])-1):
             # Draw white path
             path_width = max(1, int(zoom//2))
@@ -47,8 +47,8 @@ def draw_sqmaze(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):
                 color = globals.alg_s
             if color != (0, 0, 0):
                 pygame.draw.line(screen, color,
-                    ((i+offset_x) *  zoom, (j+offset_y) * zoom),
-                    ((i+offset_x) *  zoom, (j+offset_y+1) * zoom-1),
+                    ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y + globals.centre_y) * zoom),
+                    ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y+1 + globals.centre_y) * zoom-1),
                     path_width)
 
 def draw(sqmaze, screen,  offset_x, offset_y, zoom, rows, cols):

@@ -3,8 +3,6 @@ import numpy
 import time
 
 
-
-
 def generate_maze_kruskal(rows, cols,seed, seed_enabled):
     if seed_enabled:
         # Set a fixed seed
