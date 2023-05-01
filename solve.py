@@ -65,3 +65,75 @@ def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
     # Goal was not found
     return None
+
+def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    # Define the heuristic function
+    def heuristic(node):
+        return abs(node[0] - end[0]) + abs(node[1] - end[1])
+    
+    # Find start and end points
+    for i in range(len(sqmaze)):
+        for j in range(len(sqmaze[0])):
+            if sqmaze[i][j] == 3:
+                start = (i, j)
+            elif sqmaze[i][j] == 4:
+                end = (i, j)
+
+    # Initialize the data structures
+    visited = set()
+    parents = {}
+    g_score = {start: 0}
+    f_score = {start: heuristic(start)}
+    queue = []
+
+    # Add the start node to the queue
+    heapq.heappush(queue, (f_score[start], start))
+
+    # Loop until the queue is empty or the goal is found
+    while queue:
+        # Pop the node with the lowest f-score
+        node = heapq.heappop(queue)[1]
+
+        # Check if the goal has been reached
+        if node == end:
+            # Reconstruct the path and return it
+            path = [node]
+            while node != start:
+                node = parents[node]
+                path.append(node)
+            return list(reversed(path))
+
+        # Add the node to the visited set
+        visited.add(node)
+        if sqmaze[node[0]][node[1]] != 3:
+            sqmaze[node[0]][node[1]] = 6
+#            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
+            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            time.sleep(1/((rows*cols)/4))
+
+        # Expand the node's neighbors
+        for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:
+            if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
+                # Neighbor is out of bounds
+                continue
+            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+                # Neighbor is a wall
+                continue
+            if neighbor in visited:
+                # Neighbor has already been visited
+                continue
+
+            # Calculate the tentative g-score for the neighbor
+            tentative_g_score = g_score[node] + 1
+
+            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:
+                # This path to the neighbor is better than any previous one. Update the neighbor's g-score, f-score, and parent.
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = tentative_g_score + heuristic(neighbor)
+                parents[neighbor] = node
+
+                # Add the neighbor to the queue
+                heapq.heappush(queue, (f_score[neighbor], neighbor))
+
+    # Goal was not found
+    return None
