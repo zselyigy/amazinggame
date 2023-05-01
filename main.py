@@ -172,8 +172,8 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 100
-    cols = 100
+    rows = 10
+    cols = 10
     seed_enabled = True
     seed = 1682355278
     offset_x, offset_y =0, 0

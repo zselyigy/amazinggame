@@ -109,7 +109,7 @@ def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
             main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            time.sleep(1/((rows*cols)/4))
+            time.sleep(1/((rows*cols)/2))
 
         # Expand the node's neighbors
         for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:
