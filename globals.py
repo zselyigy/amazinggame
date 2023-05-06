@@ -1,5 +1,5 @@
 def global_init():
-    global path, sel_path, start_c, end_c, fin_path, alg_s, centre_x, centre_y
+    global path, sel_path, start_c, end_c, fin_path, alg_s, centre_x, centre_y, alg_sp, solved_text, path_nmbr, c, percentage
     path = (255, 255, 255)
     sel_path = (107, 216, 255)
     start_c = (63, 192, 76)
@@ -7,3 +7,8 @@ def global_init():
     fin_path = (255, 0, 0)
     alg_s = (255, 150, 0)
     centre_x, centre_y = 0, 0
+    alg_sp = 0
+    solved_text = ""
+    path_nmbr = 0
+    c = 0
+    percentage = 0

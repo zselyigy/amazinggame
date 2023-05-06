@@ -1,6 +1,8 @@
 import heapq
 import main
 import time
+import globals
+import decimal
 
 def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
     # Define the heuristic function
@@ -40,6 +42,11 @@ def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         # Add the node to the visited set
         visited.add(node)
+        globals.alg_sp = globals.alg_sp+1
+        globals.solved_text = globals.alg_sp / globals.path_nmbr
+        globals.c = decimal.Decimal(globals.solved_text)
+        globals.percentage =(round(globals.c, 4) * 100)
+
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
@@ -105,6 +112,11 @@ def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         # Add the node to the visited set
         visited.add(node)
+        globals.alg_sp = globals.alg_sp+1
+        globals.solved_text = globals.alg_sp / globals.path_nmbr
+        globals.c = decimal.Decimal(globals.solved_text)
+        globals.percentage =(round(globals.c, 4) * 100)
+
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
@@ -172,6 +184,11 @@ def dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         # Add the node to the visited set
         visited.add(node)
+        globals.alg_sp = globals.alg_sp+1
+        globals.solved_text = globals.alg_sp / globals.path_nmbr
+        globals.c = decimal.Decimal(globals.solved_text)
+        globals.percentage =(round(globals.c, 4) * 100)
+
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
             main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
@@ -235,6 +252,11 @@ def bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         # Add the node to the visited set
         visited.add(node)
+        globals.alg_sp = globals.alg_sp+1
+        globals.solved_text = globals.alg_sp / globals.path_nmbr
+        globals.c = decimal.Decimal(globals.solved_text)
+        globals.percentage =(round(globals.c, 4) * 100)
+
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
             main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
@@ -295,6 +317,11 @@ def dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         # Add the node to the visited set
         visited.add(node)
+        globals.alg_sp = globals.alg_sp+1
+        globals.solved_text = globals.alg_sp / globals.path_nmbr
+        globals.c = decimal.Decimal(globals.solved_text)
+        globals.percentage =(round(globals.c, 4) * 100)
+
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
             main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
