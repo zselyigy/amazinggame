@@ -137,3 +137,191 @@ def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
     # Goal was not found
     return None
+
+
+def dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    # Find start and end points
+    for i in range(len(sqmaze)):
+        for j in range(len(sqmaze[0])):
+            if sqmaze[i][j] == 3:
+                start = (i, j)
+            elif sqmaze[i][j] == 4:
+                end = (i, j)
+
+    # Initialize the data structures
+    visited = set()
+    parents = {}
+    stack = []
+
+    # Add the start node to the stack
+    stack.append(start)
+
+    # Loop until the stack is empty or the goal is found
+    while stack:
+        # Pop the next node from the stack
+        node = stack.pop()
+
+        # Check if the goal has been reached
+        if node == end:
+            # Reconstruct the path and return it
+            path = [node]
+            while node != start:
+                node = parents[node]
+                path.append(node)
+            return list(reversed(path))
+
+        # Add the node to the visited set
+        visited.add(node)
+        if sqmaze[node[0]][node[1]] != 3:
+            sqmaze[node[0]][node[1]] = 6
+            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            time.sleep(1/((rows*cols)/2))
+
+        # Expand the node's neighbors
+        for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:
+            if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
+                # Neighbor is out of bounds
+                continue
+            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+                # Neighbor is a wall
+                continue
+            if neighbor in visited:
+                # Neighbor has already been visited
+                continue
+
+            # Set the parent of the neighbor to the current node
+            parents[neighbor] = node
+
+            # Add the neighbor to the stack
+            stack.append(neighbor)
+
+    # Goal was not found
+    return None
+
+
+def bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    # Find start and end points
+    for i in range(len(sqmaze)):
+        for j in range(len(sqmaze[0])):
+            if sqmaze[i][j] == 3:
+                start = (i, j)
+            elif sqmaze[i][j] == 4:
+                end = (i, j)
+    # Find the rows and columns of the maze
+    rows = len(sqmaze)
+    cols = len(sqmaze[0])
+
+    # Initialize the data structures
+    visited = set()
+    parents = {}
+    queue = []
+
+    # Add the start node to the queue
+    queue.append(start)
+
+    # Loop until the queue is empty or the goal is found
+    while queue:
+        # Pop the node from the front of the queue
+        node = queue.pop(0)
+
+        # Check if the goal has been reached
+        if node == end:
+            # Reconstruct the path and return it
+            path = [node]
+            while node != start:
+                node = parents[node]
+                path.append(node)
+            return list(reversed(path))
+
+        # Add the node to the visited set
+        visited.add(node)
+        if sqmaze[node[0]][node[1]] != 3:
+            sqmaze[node[0]][node[1]] = 6
+            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            time.sleep(1/((rows*cols)/2))
+
+        # Expand the node's neighbors
+        for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:
+            if neighbor[0] < 0 or neighbor[0] >= rows or neighbor[1] < 0 or neighbor[1] >= cols:
+                # Neighbor is out of bounds
+                continue
+            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+                # Neighbor is a wall
+                continue
+            if neighbor in visited:
+                # Neighbor has already been visited
+                continue
+
+            # Add the neighbor to the queue and mark its parent
+            queue.append(neighbor)
+            parents[neighbor] = node
+
+    # Goal was not found
+    return None
+
+
+
+def dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+    # Find start and end points
+    for i in range(len(sqmaze)):
+        for j in range(len(sqmaze[0])):
+            if sqmaze[i][j] == 3:
+                start = (i, j)
+            elif sqmaze[i][j] == 4:
+                end = (i, j)
+
+    # Initialize the data structures
+    visited = set()
+    parents = {}
+    distances = {start: 0}
+    queue = []
+
+    # Add the start node to the queue
+    heapq.heappush(queue, (distances[start], start))
+
+    # Loop until the queue is empty or the goal is found
+    while queue:
+        # Pop the node with the lowest distance
+        node = heapq.heappop(queue)[1]
+
+        # Check if the goal has been reached
+        if node == end:
+            # Reconstruct the path and return it
+            path = [node]
+            while node != start:
+                node = parents[node]
+                path.append(node)
+            return list(reversed(path))
+
+        # Add the node to the visited set
+        visited.add(node)
+        if sqmaze[node[0]][node[1]] != 3:
+            sqmaze[node[0]][node[1]] = 6
+            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            time.sleep(1/((rows*cols)/2))
+
+        # Expand the node's neighbors
+        for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:
+            if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
+                # Neighbor is out of bounds
+                continue
+            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+                # Neighbor is a wall
+                continue
+            if neighbor in visited:
+                # Neighbor has already been visited
+                continue
+
+            # Calculate the tentative distance for the neighbor
+            tentative_distance = distances[node] + 1
+
+            if neighbor not in distances or tentative_distance < distances[neighbor]:
+                # This path to the neighbor is better than any previous one. Update the neighbor's distance and parent.
+                distances[neighbor] = tentative_distance
+                parents[neighbor] = node
+
+                # Add the neighbor to the queue
+                heapq.heappush(queue, (distances[neighbor], neighbor))
+
+    # Goal was not found
+    return None

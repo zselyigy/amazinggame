@@ -172,10 +172,10 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 25
-    cols = 25
-    seed_enabled = False
-    seed = 1682355278
+    rows = 5
+    cols = 5
+    seed_enabled = True
+    seed = 1683387020
     zoom = pygame.display.Info().current_h // (2 * rows + 1)
     globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
     globals.centre_x = ((pygame.display.Info().current_w // zoom // 2) - cols)
@@ -271,10 +271,14 @@ def main():
 
             if buttons[0].clicked:
                 zoom += 1
+                globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
+                globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
             if buttons[1].clicked:
+                globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
+                globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 zoom = max(1, zoom - 1)
                 display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
@@ -290,6 +294,18 @@ def main():
                     solver = 1
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 elif solver == 1:
+                    solver_text = 'DFS'
+                    solver = 2
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                elif solver == 2:
+                    solver_text = 'BFS'
+                    solver = 3
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                elif solver == 3:
+                    solver_text = 'Dijkstra'
+                    solver = 4
+                    display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                elif solver == 4:
                     solver_text = 'GBFS'
                     solver = 0
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -304,6 +320,12 @@ def main():
                     solution = solve.GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 if solver == 1:
                     solution = solve.astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                if solver == 2:
+                    solution = solve.dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                if solver == 3:
+                    solution = solve.bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
+                if solver == 4:
+                    solution = solve.dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons)
                 for so in solution:
                     sqmaze[so[0]][so[1]] = 5
                 sqmaze[1][startpos] = 3
