@@ -325,7 +325,7 @@ def dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
             main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            time.sleep(1/((rows*cols)/2))
+            time.sleep(1/((rows*cols)))
 
         # Expand the node's neighbors
         for neighbor in [(node[0]-1, node[1]), (node[0]+1, node[1]), (node[0], node[1]-1), (node[0], node[1]+1)]:

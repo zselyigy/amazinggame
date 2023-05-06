@@ -182,9 +182,9 @@ def main():
                 running = False
 
 #Define variables needed
-    rows = 25
-    cols = 25
-    seed_enabled = True
+    rows = 100
+    cols = 100
+    seed_enabled = False
     seed = 1683387020
     zoom = pygame.display.Info().current_h // (2 * rows + 1)
     globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
@@ -352,6 +352,7 @@ def main():
 
             if buttons[5].clicked:
                 sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
+                globals.path_nmbr = 0
                 for i in range(rows * 2 + 1):
                     for j in range(cols * 2 + 1):
                         if sqmaze[i][j] == 1:
