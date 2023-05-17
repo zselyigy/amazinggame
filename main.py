@@ -18,20 +18,23 @@ class InputBox:
         self.active = False
 
     def draw(self, surface):
-        color = self.color_active if self.rect.collidepoint(pygame.mouse.get_pos()) else self.color_passive
+        color = self.color_active if self.active else self.color_passive
         pygame.draw.rect(surface, color, self.rect)
         text_surf = self.font.render(self.text, True, (255, 255, 255))
         text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
         # set width of textfield so that text cannot get outside of user's text input
-        self.rect.w = max(100, text_surf.get_width()+10)
+#        self.rect.w = max(100, text_surf.get_width()+10)
+        pygame.display.flip()
 
     def handle_event(self, event, screen):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.active = True
+                self.draw(screen)
             else:
                 self.active = False
+                self.draw(screen)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE:  # Check for backspace
                 # Get text input from 0 to -1, i.e., end.
@@ -187,7 +190,7 @@ def main():
 
 # Define variables needed
     rows = 10
-    cols = 10
+    cols = 5
     seed_enabled = False
     seed = 1683387020
     zoom = pygame.display.Info().current_h // (2 * rows + 1)
@@ -199,10 +202,10 @@ def main():
     
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-#    window_width=800
-#    window_height=800
-    window_width=pygame.display.Info().current_w
-    window_height=pygame.display.Info().current_h
+    window_width=800
+    window_height=800
+#    window_width=pygame.display.Info().current_w
+#    window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
 # buttons
@@ -220,7 +223,8 @@ def main():
     screen.blit(text_surf, text_rect)
 # input fields
     startscreen_inputs = []
-    startscreen_inputs.append(InputBox('aaa',pygame.display.Info().current_w-globals.setup_screen_fontsize*5, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -254,8 +258,10 @@ def main():
             for inputbox in startscreen_inputs:
                 inputbox.handle_event(event,screen)
 
+# quit if quit button clicked
     if startgame_quit:
         pygame.quit()
+
 #Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
     for i in range(rows * 2 + 1):
