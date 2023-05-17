@@ -199,7 +199,7 @@ def main():
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
-# setting up the start ingame screen
+# setting up the start ingame screen 
     buttons = []
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-180,130, 170, 30))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 170, 170, 30))
