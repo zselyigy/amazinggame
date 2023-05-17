@@ -35,7 +35,7 @@ class InputBox:
             else:
                 self.active = False
                 self.draw(screen)
-        elif event.type == pygame.KEYDOWN:
+        elif event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:  # Check for backspace
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
@@ -261,6 +261,9 @@ def main():
 # quit if quit button clicked
     if startgame_quit:
         pygame.quit()
+
+    rows=int(startscreen_inputs[0].text)
+    cols=int(startscreen_inputs[1].text)
 
 #Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
