@@ -235,8 +235,6 @@ def generate_maze(rows, cols, seed, seed_enabled):
         if  sqmaze[2 * rows - 1][endpos] == 1:
             sqmaze[2 * rows - 1][endpos] = 4
             something = False
-    print("pathmaze: " + str(pathmaze))
-    print("sqmaze: " + str(sqmaze))
     return sqmaze, pathmaze, startpos, endpos
 
 def timer():
@@ -258,7 +256,7 @@ def main():
 # Define variables needed
     rows = 10
     cols = 5
-    seed_enabled = False
+    seed_enabled = True
     seed = 1683387020
     zoom = pygame.display.Info().current_h // (2 * rows + 1)
     globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
@@ -319,6 +317,7 @@ def main():
     startscreen_inputs = []
     startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
     startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 3*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -360,7 +359,9 @@ def main():
 
     rows=int(startscreen_inputs[1].text)
     cols=int(startscreen_inputs[0].text)
-    print(rows,cols)
+    if startscreen_inputs[2].text == '0':
+        seed_enabled = False
+    seed=int(startscreen_inputs[2].text)
 
 
 
@@ -416,9 +417,6 @@ def main():
                     globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if globals.timer_r == 0:
-                    globals.start_t = time.time()
-                    globals.timer_r = 1
                 mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
                 mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
