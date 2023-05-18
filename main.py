@@ -27,23 +27,23 @@ class InputBox:
 #        self.rect.w = max(100, text_surf.get_width()+10)
         pygame.display.flip()
 
-    def handle_event(self, event, screen):
+    def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.active = True
-                self.draw(screen)
+                self.draw(globals.screen)
             else:
                 self.active = False
-                self.draw(screen)
+                self.draw(globals.screen)
         elif event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:  # Check for backspace
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
-                self.draw(screen)
+                self.draw(globals.screen)
             elif len(self.text)<3 and ord(event.unicode)>47 and ord(event.unicode)<58:
                 # Append the unicode character to the text
                 self.text += event.unicode
-                self.draw(screen)
+                self.draw(globals.screen)
 
 class Button:
     def __init__(self, text, x, y, width, height):
@@ -60,9 +60,9 @@ class Button:
         text_surf = self.font.render(self.text, True, (255, 255, 255))
         text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
-        pygame.display.update(self.rectw)
+        pygame.display.update(self.rect)
 
-    def handle_event(self, event, screen):
+    def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
@@ -83,7 +83,7 @@ class GameModeButton(Button):
 #        self.allowed_gamemodes = ['Solve the maze']
         self.allowed_gamemodes = ['Solve the maze','Time limited','Speed run']
 
-    def handle_event(self, event, screen):
+    def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
@@ -96,11 +96,11 @@ class GameModeButton(Button):
                     if self.textarray[self.counter] in self.allowed_gamemodes:
                         notfound = False
                 self.text=self.textarray[self.counter]
-                self.draw(screen)
+                self.draw(globals.screen)
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.clicked = False
-                self.draw(screen)
+                self.draw(globals.screen)
 
 
 def button_draw(screen, buttons):
@@ -235,9 +235,9 @@ def generate_maze(rows, cols, seed, seed_enabled):
         if  sqmaze[2 * rows - 1][endpos] == 1:
             sqmaze[2 * rows - 1][endpos] = 4
             something = False
+    print("pathmaze: " + str(pathmaze))
+    print("sqmaze: " + str(sqmaze))
     return sqmaze, pathmaze, startpos, endpos
-
-import threading
 
 def timer():
     font = pygame.font.SysFont(None, 20)
@@ -266,7 +266,7 @@ def main():
     offset_x, offset_y = 0, 0
     solver = 0
     solver_text = 'GBFS'
-    
+    globals.timer_r = 0
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 #    window_width=800
@@ -274,6 +274,7 @@ def main():
     window_width=pygame.display.Info().current_w
     window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
+    globals.screen = screen
 # setting up the start screen
 # main buttons
     startscreen_buttons = []
@@ -322,12 +323,14 @@ def main():
         inputbox.draw(screen)
 
     pygame.display.flip()
+    globals.timer_r = 0
 
 # event loop for the start screen
     running = True
     startgame_quit = False
     pygame.key.set_repeat(200, 10)
     while running:
+        display_timer()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -338,7 +341,7 @@ def main():
                     running = False
 # screen button events                    
             for button in startscreen_buttons:
-                button.handle_event(event,screen)
+                button.handle_event(event)
 
             if startscreen_buttons[0].clicked:
                 running = False
@@ -349,17 +352,16 @@ def main():
 
 # screen inputbox events                    
             for inputbox in startscreen_inputs:
-                inputbox.handle_event(event,screen)
+                inputbox.handle_event(event)
 
 # quit if quit button clicked
     if startgame_quit:
         pygame.quit()
 
-    rows=int(startscreen_inputs[0].text)
-    cols=int(startscreen_inputs[1].text)
+    rows=int(startscreen_inputs[1].text)
+    cols=int(startscreen_inputs[0].text)
     print(rows,cols)
-    globals.timer_r = 0
-    globals.screen = screen
+
 
 
 
@@ -385,6 +387,7 @@ def main():
     running = True
     pygame.key.set_repeat(200, 10)
     while running:
+        display_timer()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -418,8 +421,11 @@ def main():
                     globals.timer_r = 1
                 mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
                 mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
-                if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
+                if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
                     if sqmaze[mazex][mazey] == 1:
+                        if globals.timer_r == 0:
+                            globals.start_t = time.time()
+                            globals.timer_r = 1
                         if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
                                 pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
@@ -453,6 +459,7 @@ def main():
                                 pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
                             pathmaze[mazex][mazey] = 0
                             sqmaze[mazex][mazey] = 1
+                            globals.timer_r = 0
                             display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
             for button in buttons:
