@@ -55,7 +55,7 @@ class Button:
         self.clicked = False
 
     def draw(self, surface):
-        color = self.hover_color if self.rect.collidepoint(pygame.mouse.get_pos()) else self.color
+        color = self.hover_color if self.clicked else self.color
         pygame.draw.rect(surface, color, self.rect)
         text_surf = self.font.render(self.text, True, (255, 255, 255))
         text_rect = text_surf.get_rect(center=self.rect.center)
@@ -93,6 +93,8 @@ class GameModeButton(Button):
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.clicked = False
+                self.draw(screen)
+
 
 def button_draw(screen, buttons):
         for button in buttons:
