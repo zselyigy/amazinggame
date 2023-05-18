@@ -60,6 +60,7 @@ class Button:
         text_surf = self.font.render(self.text, True, (255, 255, 255))
         text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
+        pygame.display.update(self.rectw)
 
     def handle_event(self, event, screen):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -80,7 +81,7 @@ class GameModeButton(Button):
         self.counter = 0
         self.text=self.textarray[self.counter]
 #        self.allowed_gamemodes = ['Solve the maze']
-        self.allowed_gamemodes = ['Solve the maze','Time limited']
+        self.allowed_gamemodes = ['Solve the maze','Time limited','Speed run']
 
     def handle_event(self, event, screen):
         if event.type == pygame.MOUSEBUTTONDOWN:
