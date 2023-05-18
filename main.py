@@ -40,7 +40,7 @@ class InputBox:
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
                 self.draw(screen)
-            else:
+            elif len(self.text)<3 and ord(event.unicode)>47 and ord(event.unicode)<58:
                 # Append the unicode character to the text
                 self.text += event.unicode
                 self.draw(screen)
