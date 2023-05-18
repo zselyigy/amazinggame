@@ -202,10 +202,10 @@ def main():
     
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-    window_width=800
-    window_height=800
-#    window_width=pygame.display.Info().current_w
-#    window_height=pygame.display.Info().current_h
+#    window_width=800
+#    window_height=800
+    window_width=pygame.display.Info().current_w
+    window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
 # buttons
@@ -215,16 +215,34 @@ def main():
     for button in startscreen_buttons:
         button.draw(screen)
 # elements for basic configuration  -  might be moved to a setup screen later
+    setup_screen_font_color = (220, 220, 220)
+    setup_screen_bg_color = (0, 0, 0)
+# plain texts
     font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
     rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10)
-    pygame.draw.rect(screen, (200, 200, 200), rect)
-    text_surf = font.render('Maze size', True, (10, 10, 10))
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Maze size', True, setup_screen_font_color)
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
+
+    font = pygame.font.SysFont(None, 20)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Horizontal:', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
+    font = pygame.font.SysFont(None, 20)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Vertical:', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
 # input fields
     startscreen_inputs = []
-    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
-    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -264,6 +282,7 @@ def main():
 
     rows=int(startscreen_inputs[0].text)
     cols=int(startscreen_inputs[1].text)
+    print(rows,cols)
 
 #Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
