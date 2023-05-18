@@ -61,10 +61,35 @@ class Button:
         text_rect = text_surf.get_rect(center=self.rect.center)
         surface.blit(text_surf, text_rect)
 
-    def handle_event(self, event):
+    def handle_event(self, event, screen):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                self.clicked = False
+
+class GameModeButton(Button):
+    def __init__(self, textarray, x, y, width, height):
+        self.textarray = textarray
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = (50, 50, 50)
+        self.hover_color = (25, 25, 25)
+        self.font = pygame.font.SysFont(None, 20)
+        self.clicked = False
+        self.counter = 0
+        self.text=self.textarray[self.counter]
+
+    def handle_event(self, event, screen):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and self.rect.collidepoint(event.pos):
+                self.clicked = True
+                if self.counter==len(self.textarray)-1:
+                    self.counter=0
+                else:
+                    self.counter = self.counter + 1
+                self.text=self.textarray[self.counter]
+                self.draw(screen)
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.clicked = False
@@ -208,10 +233,11 @@ def main():
     window_height=pygame.display.Info().current_h
     screen = pygame.display.set_mode((window_width, window_height))
 # setting up the start screen
-# buttons
+# main buttons
     startscreen_buttons = []
     startscreen_buttons.append(Button('Start game', (window_width-100)/2, (window_height-30)/2, 100, 30))
     startscreen_buttons.append(Button('Quit', (window_width-100)/2, (window_height-30)/2 + 40, 100, 30))    
+    startscreen_buttons.append(GameModeButton(['Solve the maze','Time limited','Speed run'], pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 4*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
     for button in startscreen_buttons:
         button.draw(screen)
 # elements for basic configuration  -  might be moved to a setup screen later
@@ -226,23 +252,30 @@ def main():
     screen.blit(text_surf, text_rect)
 
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
     pygame.draw.rect(screen, setup_screen_bg_color, rect)
     text_surf = font.render('Horizontal:', True, setup_screen_font_color)
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10)
     pygame.draw.rect(screen, setup_screen_bg_color, rect)
     text_surf = font.render('Vertical:', True, setup_screen_font_color)
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
+    font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Game mode', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
 # input fields
     startscreen_inputs = []
-    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, globals.setup_screen_fontsize+40 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
-    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*globals.setup_screen_fontsize+60 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -263,7 +296,7 @@ def main():
                     running = False
 # screen button events                    
             for button in startscreen_buttons:
-                button.handle_event(event)
+                button.handle_event(event,screen)
 
             if startscreen_buttons[0].clicked:
                 running = False
