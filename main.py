@@ -79,15 +79,21 @@ class GameModeButton(Button):
         self.clicked = False
         self.counter = 0
         self.text=self.textarray[self.counter]
+#        self.allowed_gamemodes = ['Solve the maze']
+        self.allowed_gamemodes = ['Solve the maze','Time limited']
 
     def handle_event(self, event, screen):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
-                if self.counter==len(self.textarray)-1:
-                    self.counter=0
-                else:
-                    self.counter = self.counter + 1
+                notfound = True
+                while notfound:
+                    if self.counter==len(self.textarray)-1:
+                        self.counter=0
+                    else:
+                        self.counter = self.counter + 1
+                    if self.textarray[self.counter] in self.allowed_gamemodes:
+                        notfound = False
                 self.text=self.textarray[self.counter]
                 self.draw(screen)
         elif event.type == pygame.MOUSEBUTTONUP:
