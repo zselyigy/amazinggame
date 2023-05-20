@@ -313,11 +313,18 @@ def main():
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
+    font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
+    rect = pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Seed', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
 # input fields
     startscreen_inputs = []
     startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
     startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
-    startscreen_inputs.append(InputBox(str(),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 3*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
