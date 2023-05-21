@@ -7,6 +7,7 @@ import numpy
 import solve
 import globals
 import time
+import unicodedata
 
 class Player:
     def __init__(self, name):
@@ -22,6 +23,7 @@ class InputBox:
         self.font = pygame.font.SysFont(None, 20)
         self.active = False
         self.digits = digits
+        self.notmodified = True
 
     def draw(self, surface):
         color = self.color_active if self.active else self.color_passive
@@ -45,13 +47,21 @@ class InputBox_number(InputBox):
                 self.active = False
                 self.draw(globals.screen)
         elif event.type == pygame.KEYDOWN and self.active:
+            if len(event.unicode) != 1:
+                a = -1
+            else:
+                a = unicodedata.decimal(event.unicode[0], -1)
             if event.key == pygame.K_BACKSPACE:  # Check for backspace
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
                 self.draw(globals.screen)
-            elif len(self.text)<self.digits and ord(event.unicode)>47 and ord(event.unicode)<58:
+            elif len(self.text)<self.digits and a>=0 and a<10:
                 # Append the unicode character to the text
-                self.text += event.unicode
+                if self.notmodified:
+                    self.notmodified = False
+                    self.text = event.unicode
+                else:
+                    self.text += event.unicode
                 self.draw(globals.screen)
 
 class InputBox_string(InputBox):
@@ -68,9 +78,13 @@ class InputBox_string(InputBox):
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
                 self.draw(globals.screen)
-            elif len(self.text)<self.digits and ((ord(event.unicode)>47 and ord(event.unicode)<58) or (ord(event.unicode)>64 and ord(event.unicode)<91) or (ord(event.unicode)>96 and ord(event.unicode)<123)):
+            elif len(self.text)<self.digits:
                 # Append the unicode character to the text
-                self.text += event.unicode
+                if self.notmodified:
+                    self.notmodified = False
+                    self.text = event.unicode
+                else:
+                    self.text += event.unicode
                 self.draw(globals.screen)
 
 class Button:
@@ -94,9 +108,11 @@ class Button:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
+                self.draw(globals.screen)
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 self.clicked = False
+                self.draw(globals.screen)
 
 class GameModeButton(Button):
     def __init__(self, textarray, x, y, width, height):
@@ -198,7 +214,7 @@ def display_mazecell(screen, offset_x, offset_y, zoom, i, j, sqmaze):
 def display_timer():
     if globals.timer_r == 1:
         globals.time = round(time.time()-globals.start_t, 3)
-    update_rect = pygame.Rect(pygame.display.Info().current_w-360, 90, 170, 30)
+    update_rect = pygame.Rect(10, 10, 170, 30)
     timer()
     pygame.display.update(update_rect) 
 
@@ -210,7 +226,7 @@ def endgame_display(screen):
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-360, 90, 170, 30)
+    rect = pygame.Rect(10, 10, 170, 30)
     pygame.draw.rect(screen, (50, 50, 50), rect)
     text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
     text_rect = text_surf.get_rect(center=rect.center)
@@ -226,7 +242,7 @@ def endgame_display_solved(screen):
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-360, 90, 170, 30)
+    rect = pygame.Rect(10, 10, 170, 30)
     pygame.draw.rect(screen, (50, 50, 50), rect)
     text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
     text_rect = text_surf.get_rect(center=rect.center)
@@ -284,7 +300,7 @@ def main():
 # Define variables needed
     rows = 10
     cols = 5
-    seed_enabled = True
+    seed_enabled = False
     seed = 1683387020
     zoom = pygame.display.Info().current_h // (2 * rows + 1)
     globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
@@ -366,7 +382,7 @@ def main():
     startscreen_inputs = []
     startscreen_inputs.append(InputBox_number(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
     startscreen_inputs.append(InputBox_number(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
-    startscreen_inputs.append(InputBox_number(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10,12))
+    startscreen_inputs.append(InputBox_number('0',pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10,12))
     startscreen_inputs.append(InputBox_string("Player",pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 3*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10,20))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
@@ -382,11 +398,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-# game starts by key s or clicking the start button
-# keydown events
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    running = False
+# game starts clicking the start button
 # screen button events                    
             for button in startscreen_buttons:
                 button.handle_event(event)
@@ -409,8 +421,9 @@ def main():
     rows=int(startscreen_inputs[1].text)
     cols=int(startscreen_inputs[0].text)
     seed_enabled = True
-    if startscreen_inputs[2].text == '0':
+    if startscreen_inputs[2].text == '0' or startscreen_inputs[2].text == '':
         seed_enabled = False
+        startscreen_inputs[2].text = '0'
     seed=int(startscreen_inputs[2].text)
 
 #Generate maze
@@ -580,7 +593,7 @@ def main():
                 globals.timer_r = 0
                 endgame_display_solved(screen)
                 pygame.display.flip()
-                pygame.event.clear
+                pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 
             if buttons[5].clicked:
                 sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
