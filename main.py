@@ -7,9 +7,13 @@ import numpy
 import solve
 import globals
 import time
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+
 class InputBox:
     def __init__(self, text, x, y, width, height,digits):
-        Button.__init__
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
@@ -29,6 +33,9 @@ class InputBox:
 #        self.rect.w = max(100, text_surf.get_width()+10)
         pygame.display.flip()
 
+
+
+class InputBox_number(InputBox):
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
@@ -43,6 +50,25 @@ class InputBox:
                 self.text = self.text[:-1]
                 self.draw(globals.screen)
             elif len(self.text)<self.digits and ord(event.unicode)>47 and ord(event.unicode)<58:
+                # Append the unicode character to the text
+                self.text += event.unicode
+                self.draw(globals.screen)
+
+class InputBox_string(InputBox):
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and self.rect.collidepoint(event.pos):
+                self.active = True
+                self.draw(globals.screen)
+            else:
+                self.active = False
+                self.draw(globals.screen)
+        elif event.type == pygame.KEYDOWN and self.active:
+            if event.key == pygame.K_BACKSPACE:  # Check for backspace
+                # Get text input from 0 to -1, i.e., end.
+                self.text = self.text[:-1]
+                self.draw(globals.screen)
+            elif len(self.text)<self.digits and ((ord(event.unicode)>47 and ord(event.unicode)<58) or (ord(event.unicode)>64 and ord(event.unicode)<91) or (ord(event.unicode)>96 and ord(event.unicode)<123)):
                 # Append the unicode character to the text
                 self.text += event.unicode
                 self.draw(globals.screen)
@@ -322,11 +348,26 @@ def main():
     text_rect = text_surf.get_rect(center=rect.center)
     screen.blit(text_surf, text_rect)
 
+    font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
+    rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Welcome, Player!', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
+    font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
+    rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10)
+    pygame.draw.rect(screen, setup_screen_bg_color, rect)
+    text_surf = font.render('Enter your name!', True, setup_screen_font_color)
+    text_rect = text_surf.get_rect(center=rect.center)
+    screen.blit(text_surf, text_rect)
+
 # input fields
     startscreen_inputs = []
-    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
-    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
-    startscreen_inputs.append(InputBox(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10,12))
+    startscreen_inputs.append(InputBox_number(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
+    startscreen_inputs.append(InputBox_number(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
+    startscreen_inputs.append(InputBox_number(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10,12))
+    startscreen_inputs.append(InputBox_string("Player",pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 3*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10,20))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -560,5 +601,3 @@ pygame.quit()
 
 if __name__ == "__main__":
     main()
-
-
