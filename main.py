@@ -8,7 +8,8 @@ import solve
 import globals
 import time
 class InputBox:
-    def __init__(self, text, x, y, width, height):
+    def __init__(self, text, x, y, width, height,digits):
+        Button.__init__
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
@@ -16,6 +17,7 @@ class InputBox:
         self.color = self.color_passive
         self.font = pygame.font.SysFont(None, 20)
         self.active = False
+        self.digits = digits
 
     def draw(self, surface):
         color = self.color_active if self.active else self.color_passive
@@ -40,7 +42,7 @@ class InputBox:
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
                 self.draw(globals.screen)
-            elif len(self.text)<3 and ord(event.unicode)>47 and ord(event.unicode)<58:
+            elif len(self.text)<self.digits and ord(event.unicode)>47 and ord(event.unicode)<58:
                 # Append the unicode character to the text
                 self.text += event.unicode
                 self.draw(globals.screen)
@@ -322,9 +324,9 @@ def main():
 
 # input fields
     startscreen_inputs = []
-    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
-    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10))
-    startscreen_inputs.append(InputBox(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_inputs.append(InputBox(str(rows),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
+    startscreen_inputs.append(InputBox(str(cols),pygame.display.Info().current_w-globals.setup_screen_fontsize*2, 2*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*2-20, globals.setup_screen_fontsize+10,3))
+    startscreen_inputs.append(InputBox(str(seed),pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 6*(globals.setup_screen_fontsize+20)+20  , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10,12))
     for inputbox in startscreen_inputs:
         inputbox.draw(screen)
 
@@ -366,6 +368,7 @@ def main():
 
     rows=int(startscreen_inputs[1].text)
     cols=int(startscreen_inputs[0].text)
+    seed_enabled = True
     if startscreen_inputs[2].text == '0':
         seed_enabled = False
     seed=int(startscreen_inputs[2].text)
