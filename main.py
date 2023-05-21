@@ -241,7 +241,7 @@ def generate_maze(rows, cols, seed, seed_enabled):
 
 def timer():
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-360, 90, 170, 30)
+    rect = pygame.Rect(10, 10, 170, 30)
     pygame.draw.rect(globals.screen, (50, 50, 50), rect)
     text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
     text_rect = text_surf.get_rect(center=rect.center)
@@ -338,7 +338,6 @@ def main():
     startgame_quit = False
     pygame.key.set_repeat(200, 10)
     while running:
-        display_timer()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -373,25 +372,23 @@ def main():
         seed_enabled = False
     seed=int(startscreen_inputs[2].text)
 
-
-
-
-
 #Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
     for i in range(rows * 2 + 1):
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
+
 # setting up the start ingame screen 
+    ingame_button_height = 30
     buttons = []
-    buttons.append(Button('Zoom In', pygame.display.Info().current_w-180,130, 170, 30))
-    buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 170, 170, 30))
-    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 210, 170, 30))
-    buttons.append(Button('Change Solver',pygame.display.Info().current_w-180, 250, 170, 30))    
-    buttons.append(Button('Solve',pygame.display.Info().current_w-180, 290, 170, 30))
-    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 330, 170, 30))
-    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 370, 170, 30))
+    buttons.append(Button('Zoom In', pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Change Solver',pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))    
+    buttons.append(Button('Solve',pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
 #Draw maze on screen
     display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
 #Handle pygame events
