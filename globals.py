@@ -1,5 +1,6 @@
 def global_init():
-    global path, sel_path, start_c, end_c, fin_path, alg_s, centre_x, centre_y, alg_sp, solved_text, path_nmbr, c, percentage, time, start_t, timer_r, screen, setup_screen_fontsize
+    global path, sel_path, start_c, end_c, fin_path, alg_s, centre_x, centre_y, alg_sp, solved_text, path_nmbr, c, percentage, time, start_t, timer_r, screen
+    global setup_screen_fontsize, setup_screen_font_color, setup_screen_bg_color
     path = (255, 255, 255)
     sel_path = (107, 216, 255)
     start_c = (63, 192, 76)
@@ -18,3 +19,5 @@ def global_init():
     screen = 0
 # Parameters for display
     setup_screen_fontsize = 30
+    setup_screen_font_color = (220, 220, 220)
+    setup_screen_bg_color = (0, 0, 0)
