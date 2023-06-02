@@ -4,7 +4,7 @@ import time
 import globals
 import decimal
 
-def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
@@ -49,8 +49,8 @@ def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-#            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+#            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
+            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
             main.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -74,7 +74,7 @@ def GBFS(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
     # Goal was not found
     return None
 
-def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
@@ -120,8 +120,8 @@ def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-#            main.display_ingame_screen(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+#            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
+            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
             main.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -153,7 +153,7 @@ def astar(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
     return None
 
 
-def dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):
@@ -193,7 +193,7 @@ def dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
             main.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -219,7 +219,7 @@ def dfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
     return None
 
 
-def bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):
@@ -262,7 +262,7 @@ def bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
             main.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -287,7 +287,7 @@ def bfs(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
 
 
-def dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
+def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):
@@ -328,7 +328,7 @@ def dijkstra(sqmaze, screen, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(screen, offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
             main.display_timer()
             time.sleep(1/((rows*cols)/2))
 
