@@ -24,6 +24,7 @@ class Player:
 class InputBox:
     def __init__(self, text, x, y, width, height,digits):
         self.text = text
+        self.default_text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
@@ -85,6 +86,9 @@ class InputBox_string(InputBox):
             if event.key == pygame.K_BACKSPACE:  # Check for backspace
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
+                if len(self.text)==0:
+                    self.text = self.default_text
+                    self.notmodified = True
                 self.StartScreen_Refresh()
                 self.draw()
             elif len(self.text)<self.digits:
@@ -104,6 +108,7 @@ class InputBox_string(InputBox):
 class InputBox_Playername(InputBox_string):
     def __init__(self, text, x, y, width, height,digits, MyPlayer):
         self.text = text
+        self.default_text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
