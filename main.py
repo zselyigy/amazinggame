@@ -326,15 +326,6 @@ def timer():
     text_rect = text_surf.get_rect(center=rect.center)
     globals.screen.blit(text_surf, text_rect)
 
-# move to display
-def textDisplay(text, fontsize, wtop, htop, width, heights, bgcolor, tcolor):
-    font = pygame.font.SysFont(None, fontsize)
-    rect = pygame.Rect(wtop, htop, width, heights)
-    pygame.draw.rect(globals.screen, bgcolor, rect)
-    text_surf = font.render(text, True, tcolor)
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
 
 def main():
     globals.global_init()
@@ -372,12 +363,12 @@ def main():
     for button in startscreen_buttons:
         button.draw()
 # plain texts
-    textDisplay('Maze size', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    textDisplay('Horizontal:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    textDisplay('Vertical:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    textDisplay('Game mode', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    textDisplay('Seed', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    textDisplay('Enter your name!', globals.setup_screen_fontsize, pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Maze size', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Horizontal:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Vertical:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Game mode', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Seed', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Enter your name!', globals.setup_screen_fontsize, pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
 
 # input fields
     startscreen_inputs = []

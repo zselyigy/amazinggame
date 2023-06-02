@@ -1,6 +1,14 @@
 import pygame
 import globals
 
+def textDisplay(text, fontsize, wtop, htop, width, heights, bgcolor, tcolor):
+    font = pygame.font.SysFont(None, fontsize)
+    rect = pygame.Rect(wtop, htop, width, heights)
+    pygame.draw.rect(globals.screen, bgcolor, rect)
+    text_surf = font.render(text, True, tcolor)
+    text_rect = text_surf.get_rect(center=rect.center)
+    globals.screen.blit(text_surf, text_rect)
+
 def draw_maze(maze, offset_x, offset_y, zoom, centre_x, centre_y):
     for edge in maze:
         x1, y1 = edge[0][1], edge[0][0]
