@@ -13,18 +13,9 @@ class Player:
     def __init__(self, name):
         self.name = name
 
-    def startscreen_display(self):
-        font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
-        rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10)
-        pygame.draw.rect(globals.screen, globals.setup_screen_bg_color, rect)
-        text_surf = font.render('Welcome, '+self.name+'!', True, globals.setup_screen_font_color)
-        text_rect = text_surf.get_rect(center=rect.center)
-        globals.screen.blit(text_surf, text_rect)
-
 class InputBox:
     def __init__(self, text, x, y, width, height,digits):
         self.text = text
-        self.default_text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
@@ -87,7 +78,7 @@ class InputBox_string(InputBox):
                 # Get text input from 0 to -1, i.e., end.
                 self.text = self.text[:-1]
                 if len(self.text)==0:
-                    self.text = self.default_text
+                    self.text = 'Player'
                     self.notmodified = True
                 self.StartScreen_Refresh()
                 self.draw()
@@ -108,7 +99,6 @@ class InputBox_string(InputBox):
 class InputBox_Playername(InputBox_string):
     def __init__(self, text, x, y, width, height,digits, MyPlayer):
         self.text = text
-        self.default_text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
@@ -118,10 +108,20 @@ class InputBox_Playername(InputBox_string):
         self.digits = digits
         self.notmodified = True
         self.Player = MyPlayer
+        self.startscreen_display()
+
+    def startscreen_display(self):
+        font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
+        rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10)
+        pygame.draw.rect(globals.screen, globals.setup_screen_bg_color, rect)
+        text_surf = font.render('Welcome, '+self.Player.name+'!', True, globals.setup_screen_font_color)
+        text_rect = text_surf.get_rect(center=rect.center)
+        globals.screen.blit(text_surf, text_rect)
+
 
     def StartScreen_Refresh(self):
         self.Player.name = self.text
-        self.Player.startscreen_display()
+        self.startscreen_display()
         pygame.display.flip()
 
 class Button:
@@ -398,8 +398,6 @@ def main():
     text_surf = font.render('Seed', True, globals.setup_screen_font_color)
     text_rect = text_surf.get_rect(center=rect.center)
     globals.screen.blit(text_surf, text_rect)
-
-    MyPlayer.startscreen_display()
 
     font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
     rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10)
