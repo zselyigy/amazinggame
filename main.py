@@ -111,13 +111,7 @@ class InputBox_Playername(InputBox_string):
         self.startscreen_display()
 
     def startscreen_display(self):
-        font = pygame.font.SysFont(None, globals.setup_screen_fontsize)
-        rect = pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10)
-        pygame.draw.rect(globals.screen, globals.setup_screen_bg_color, rect)
-        text_surf = font.render('Welcome, '+self.Player.name+'!', True, globals.setup_screen_font_color)
-        text_rect = text_surf.get_rect(center=rect.center)
-        globals.screen.blit(text_surf, text_rect)
-
+        display.textDisplay('Welcome, '+self.Player.name+'!', globals.setup_screen_fontsize, pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
 
     def StartScreen_Refresh(self):
         self.Player.name = self.text
