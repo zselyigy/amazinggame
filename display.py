@@ -7,7 +7,7 @@ def textDisplay(text, fontsize, rect, bgcolor, tcolor):
     text_surf = font.render(text, True, tcolor)
     text_rect = text_surf.get_rect(center=rect.center)
     globals.screen.blit(text_surf, text_rect)
-    pygame.display.update(text_rect)
+    pygame.display.update(rect)
 
 def draw_maze(maze, offset_x, offset_y, zoom, centre_x, centre_y):
     for edge in maze:
