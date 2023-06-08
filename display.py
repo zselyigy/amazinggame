@@ -1,9 +1,8 @@
 import pygame
 import globals
 
-def textDisplay(text, fontsize, wtop, htop, width, heights, bgcolor, tcolor):
+def textDisplay(text, fontsize, rect, bgcolor, tcolor):
     font = pygame.font.SysFont(None, fontsize)
-    rect = pygame.Rect(wtop, htop, width, heights)
     pygame.draw.rect(globals.screen, bgcolor, rect)
     text_surf = font.render(text, True, tcolor)
     text_rect = text_surf.get_rect(center=rect.center)

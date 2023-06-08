@@ -20,20 +20,22 @@ class InputBox:
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
         self.color = self.color_passive
-        self.font = pygame.font.SysFont(None, 20)
+        self.fontsize = 20
+        self.font = pygame.font.SysFont(None, self.fontsize)
         self.active = False
         self.digits = digits
         self.notmodified = True
 
     def draw(self):
         color = self.color_active if self.active else self.color_passive
-        pygame.draw.rect(globals.screen, color, self.rect)
-        text_surf = self.font.render(self.text, True, (255, 255, 255))
-        text_rect = text_surf.get_rect(center=self.rect.center)
-        globals.screen.blit(text_surf, text_rect)
-        # set width of textfield so that text cannot get outside of user's text input
-#        self.rect.w = max(100, text_surf.get_width()+10)
-        pygame.display.flip()
+        display.textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
+#         pygame.draw.rect(globals.screen, color, self.rect)
+#         text_surf = self.font.render(self.text, True, (255, 255, 255))
+#         text_rect = text_surf.get_rect(center=self.rect.center)
+#         globals.screen.blit(text_surf, text_rect)
+#         # set width of textfield so that text cannot get outside of user's text input
+# #        self.rect.w = max(100, text_surf.get_width()+10)
+#        pygame.display.flip()
 
 
 
@@ -103,7 +105,8 @@ class InputBox_Playername(InputBox_string):
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('chartreuse4')
         self.color = self.color_passive
-        self.font = pygame.font.SysFont(None, 20)
+        self.fontsize = 20
+        self.font = pygame.font.SysFont(None, self.fontsize)
         self.active = False
         self.digits = digits
         self.notmodified = True
@@ -111,7 +114,7 @@ class InputBox_Playername(InputBox_string):
         self.startscreen_display()
 
     def startscreen_display(self):
-        display.textDisplay('Welcome, '+self.Player.name+'!', globals.setup_screen_fontsize, pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+        display.textDisplay('Welcome, '+self.Player.name+'!', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*10, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
 
     def StartScreen_Refresh(self):
         self.Player.name = self.text
@@ -124,16 +127,13 @@ class Button:
         self.rect = pygame.Rect(x, y, width, height)
         self.color = (50, 50, 50)
         self.hover_color = (25, 25, 25)
-        self.font = pygame.font.SysFont(None, 20)
+        self.fontsize = 20
+        self.font = pygame.font.SysFont(None, self.fontsize)
         self.clicked = False
 
     def draw(self):
         color = self.hover_color if self.clicked else self.color
-        pygame.draw.rect(globals.screen, color, self.rect)
-        text_surf = self.font.render(self.text, True, (255, 255, 255))
-        text_rect = text_surf.get_rect(center=self.rect.center)
-        globals.screen.blit(text_surf, text_rect)
-        pygame.display.update(self.rect)
+        display.textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -151,7 +151,8 @@ class GameModeButton(Button):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = (50, 50, 50)
         self.hover_color = (25, 25, 25)
-        self.font = pygame.font.SysFont(None, 20)
+        self.fontsize = 20
+        self.font = pygame.font.SysFont(None, self.fontsize)
         self.clicked = False
         self.counter = 0
         self.text=self.textarray[self.counter]
@@ -357,12 +358,12 @@ def main():
     for button in startscreen_buttons:
         button.draw()
 # plain texts
-    display.textDisplay('Maze size', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Horizontal:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Vertical:', 20, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Game mode', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Seed', globals.setup_screen_fontsize, pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Enter your name!', globals.setup_screen_fontsize, pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10, globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Maze size', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Horizontal:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Vertical:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Game mode', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Seed', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Enter your name!', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
 
 # input fields
     startscreen_inputs = []
