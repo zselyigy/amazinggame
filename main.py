@@ -420,14 +420,24 @@ def main():
     MyConfig.last_cols = cols
     MyConfig.save()
 
+
+# display parameters
+    zoom_y = pygame.display.Info().current_h // (2 * rows)
+    zoom_x = pygame.display.Info().current_w // (2 * cols)
+    zoom = min(zoom_x,zoom_y)
+    if zoom_y >= zoom_x:
+        globals.centre_y = pygame.display.Info().current_h // zoom // 2 - rows
+        globals.centre_x = 0
+    else:
+        globals.centre_y = 0
+        globals.centre_x = pygame.display.Info().current_w // zoom // 2 - cols
+
+    # globals.centre_y = ((pygame.display.Info().current_h // (pygame.display.Info().current_h // (2 * rows + 1)) // 2) - rows)
+    # globals.centre_x = ((pygame.display.Info().current_w // (pygame.display.Info().current_w // (2 * cols + 1)) // 2) - cols)
+
     temp = rows
     rows = cols
     cols = temp
-
-# display parameters
-    zoom = pygame.display.Info().current_h // (2 * rows + 1)
-    globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
-    globals.centre_x = ((pygame.display.Info().current_w // zoom // 2) - cols)
 
 # Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
@@ -450,7 +460,7 @@ def main():
     display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
 #Handle pygame events
     running = True
-    pygame.key.set_repeat(200, 10)
+    pygame.key.set_repeat(200, 50)
     while running:
         display_timer()
         for event in pygame.event.get():
