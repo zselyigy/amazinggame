@@ -8,6 +8,30 @@ import solve
 import globals
 import time
 import unicodedata
+try:
+   import cPickle as pickle
+except:
+   import pickle
+import traceback
+
+class gameConfig():
+    def __init__(self):
+        try:
+            self.load()
+        except:
+            self.last_player = 'Player'
+
+
+    def save(self):
+        file = open('game.cfg','wb')
+        file.write(pickle.dumps(self.__dict__))
+        file.close()
+
+    def load(self):
+        file = open('game.cfg','rb')
+        dataPickle = file.read()
+        file.close()
+        self.__dict__ = pickle.loads(dataPickle)
 
 class Player:
     def __init__(self, name):
@@ -29,15 +53,6 @@ class InputBox:
     def draw(self):
         color = self.color_active if self.active else self.color_passive
         display.textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
-#         pygame.draw.rect(globals.screen, color, self.rect)
-#         text_surf = self.font.render(self.text, True, (255, 255, 255))
-#         text_rect = text_surf.get_rect(center=self.rect.center)
-#         globals.screen.blit(text_surf, text_rect)
-#         # set width of textfield so that text cannot get outside of user's text input
-# #        self.rect.w = max(100, text_surf.get_width()+10)
-#        pygame.display.flip()
-
-
 
 class InputBox_number(InputBox):
     def handle_event(self, event):
@@ -316,6 +331,8 @@ def main():
     pygame.init()
     pygame.display.set_caption('The Wonder of Mazes')
 
+    MyConfig = gameConfig()
+
 # Define variables needed
     rows = 10
     cols = 5
@@ -328,7 +345,7 @@ def main():
     solver = 0
     solver_text = 'GBFS'
     globals.timer_r = 0
-    MyPlayer = Player("Player")
+    MyPlayer = Player(MyConfig.last_player)
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 #    window_width=800
@@ -400,6 +417,10 @@ def main():
         seed_enabled = False
         startscreen_inputs[2].text = '0'
     seed=int(startscreen_inputs[2].text)
+
+    MyConfig.last_player = MyPlayer.name
+    MyConfig.save()
+
 
 #Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
