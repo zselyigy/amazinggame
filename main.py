@@ -12,7 +12,6 @@ try:
    import cPickle as pickle
 except:
    import pickle
-import traceback
 
 class gameConfig():
     def __init__(self):
@@ -20,7 +19,8 @@ class gameConfig():
             self.load()
         except:
             self.last_player = 'Player'
-
+            self.last_rows = 10
+            self.last_cols = 5
 
     def save(self):
         file = open('game.cfg','wb')
@@ -334,13 +334,10 @@ def main():
     MyConfig = gameConfig()
 
 # Define variables needed
-    rows = 10
-    cols = 5
+    rows = MyConfig.last_rows
+    cols = MyConfig.last_cols
     seed_enabled = False
     seed = 1683387020
-    zoom = pygame.display.Info().current_h // (2 * rows + 1)
-    globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
-    globals.centre_x = ((pygame.display.Info().current_w // zoom // 2) - cols)
     offset_x, offset_y = 0, 0
     solver = 0
     solver_text = 'GBFS'
@@ -364,8 +361,8 @@ def main():
         button.draw()
 # plain texts
     display.textDisplay('Maze size', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Horizontal:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
-    display.textDisplay('Vertical:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Rows:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 1*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+    display.textDisplay('Cols:', 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*3, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
     display.textDisplay('Game mode', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 3*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
     display.textDisplay('Seed', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 5*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
     display.textDisplay('Enter your name!', globals.setup_screen_fontsize, pygame.Rect(pygame.display.Info().current_w//2-globals.setup_screen_fontsize*3, 2*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*6, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
@@ -410,8 +407,8 @@ def main():
     if startgame_quit:
         pygame.quit()
 
-    rows=int(startscreen_inputs[1].text)
-    cols=int(startscreen_inputs[0].text)
+    rows=int(startscreen_inputs[0].text)
+    cols=int(startscreen_inputs[1].text)
     seed_enabled = True
     if startscreen_inputs[2].text == '0' or startscreen_inputs[2].text == '':
         seed_enabled = False
@@ -419,10 +416,20 @@ def main():
     seed=int(startscreen_inputs[2].text)
 
     MyConfig.last_player = MyPlayer.name
+    MyConfig.last_rows = rows
+    MyConfig.last_cols = cols
     MyConfig.save()
 
+    temp = rows
+    rows = cols
+    cols = temp
 
-#Generate maze
+# display parameters
+    zoom = pygame.display.Info().current_h // (2 * rows + 1)
+    globals.centre_y = ((pygame.display.Info().current_h // zoom // 2) - rows)
+    globals.centre_x = ((pygame.display.Info().current_w // zoom // 2) - cols)
+
+# Generate maze
     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
     for i in range(rows * 2 + 1):
         for j in range(cols * 2 + 1):
