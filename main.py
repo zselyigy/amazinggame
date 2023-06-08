@@ -100,16 +100,7 @@ class InputBox_string(InputBox):
 
 class InputBox_Playername(InputBox_string):
     def __init__(self, text, x, y, width, height,digits, MyPlayer):
-        self.text = text
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color_active = pygame.Color('lightskyblue3')
-        self.color_passive = pygame.Color('chartreuse4')
-        self.color = self.color_passive
-        self.fontsize = 20
-        self.font = pygame.font.SysFont(None, self.fontsize)
-        self.active = False
-        self.digits = digits
-        self.notmodified = True
+        super().__init__(text, x, y, width, height,digits)
         self.Player = MyPlayer
         self.startscreen_display()
 
@@ -121,7 +112,7 @@ class InputBox_Playername(InputBox_string):
         self.startscreen_display()
         pygame.display.flip()
 
-class Button:
+class baseButton:
     def __init__(self, text, x, y, width, height):
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
@@ -135,6 +126,8 @@ class Button:
         color = self.hover_color if self.clicked else self.color
         display.textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
 
+
+class Button(baseButton):
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
@@ -145,17 +138,12 @@ class Button:
                 self.clicked = False
                 self.draw()
 
-class GameModeButton(Button):
+class GameModeButton(baseButton):
     def __init__(self, textarray, x, y, width, height):
         self.textarray = textarray
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = (50, 50, 50)
-        self.hover_color = (25, 25, 25)
-        self.fontsize = 20
-        self.font = pygame.font.SysFont(None, self.fontsize)
-        self.clicked = False
         self.counter = 0
         self.text=self.textarray[self.counter]
+        super().__init__(self.text, x, y, width, height)
 #        self.allowed_gamemodes = ['Solve the maze']
         self.allowed_gamemodes = ['Solve the maze','Time limited','Speed run']
 
