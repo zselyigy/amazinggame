@@ -65,19 +65,6 @@ def draw(sqmaze, offset_x, offset_y, zoom, rows, cols):
     globals.screen.fill((0, 0, 0))
     draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols)
 
-class baseButton:
-    def __init__(self, text, x, y, width, height):
-        self.text = text
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = (50, 50, 50)
-        self.hover_color = (25, 25, 25)
-        self.fontsize = 20
-        self.font = pygame.font.SysFont(None, self.fontsize)
-        self.clicked = False
-
-    def draw(self):
-        color = self.hover_color if self.clicked else self.color
-        textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
 
 class InputBox:
     def __init__(self, text, x, y, width, height,digits):
@@ -170,11 +157,48 @@ class InputBox_Playername(InputBox_string):
         pygame.display.flip()
 
 
+class baseButton:
+    def __init__(self, text, x, y, width, height):
+        self.text = text
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = (50, 50, 50)
+        self.hover_color = (25, 25, 25)
+        self.fontsize = 20
+        self.font = pygame.font.SysFont(None, self.fontsize)
+        self.clicked = False
+
+    def draw(self):
+        color = self.hover_color if self.clicked else self.color
+        textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
+
+
 class Button(baseButton):
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1 and self.rect.collidepoint(event.pos):
                 self.clicked = True
+                self.draw()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                self.clicked = False
+                self.draw()
+
+class SelfScrollButton(baseButton):
+    def __init__(self, textarray, x, y, width, height):
+        self.textarray = textarray
+        self.counter = 0
+        self.text=self.textarray[self.counter]
+        super().__init__(self.text, x, y, width, height)
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1 and self.rect.collidepoint(event.pos):
+                self.clicked = True
+                if self.counter==len(self.textarray)-1:
+                    self.counter=0
+                else:
+                    self.counter = self.counter + 1
+                self.text=self.textarray[self.counter]
                 self.draw()
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
@@ -208,6 +232,7 @@ class GameModeButton(baseButton):
             if event.button == 1:
                 self.clicked = False
                 self.draw()
+
 
 def zoomlevel_diplay(zoom_level):
     font = pygame.font.SysFont(None, 20)
@@ -244,7 +269,7 @@ def display_endgame_solved():
 
 def timer():
     font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(10, 10, 170, 30)
+    rect = pygame.Rect(pygame.display.Info().current_w-180, 90, 170, 30)
     pygame.draw.rect(globals.screen, (50, 50, 50), rect)
     text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
     text_rect = text_surf.get_rect(center=rect.center)
@@ -253,7 +278,7 @@ def timer():
 def display_timer():
     if globals.timer_r == 1:
         globals.time = round(time.time()-globals.start_t, 3)
-    update_rect = pygame.Rect(10, 10, 170, 30)
+    update_rect = pygame.Rect(pygame.display.Info().current_w-180, 90, 170, 30)
     timer()
     pygame.display.update(update_rect) 
 
@@ -287,7 +312,7 @@ def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update,
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Restart',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Change Solver',pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))    
+    buttons.append(SelfScrollButton(['Solver: GBFS','Solver: A*','Solver: DFS','Solver: BFS','Solver: Dijkstra'], pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
     buttons.append(Button('Solve',pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Quit',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
@@ -298,7 +323,6 @@ def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons,
     for button in buttons:
         button.draw()
     zoomlevel_diplay(zoom)
-    solver_diplay(solver_text)
     solved_display()
     timer()
     if update == 0:

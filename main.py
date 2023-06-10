@@ -8,9 +8,9 @@ import solve
 import globals
 import time
 try:
-   import cPickle as pickle
+    import cPickle as pickle
 except:
-   import pickle
+    import pickle
 
 class gameConfig():
     def __init__(self):
@@ -194,23 +194,20 @@ def main():
                     offset_y += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
-                    zoom += 1
                     globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                     globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
+                    zoom += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
-                    zoom = max(1, zoom - 1)
                     globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                     globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
+                    zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
                 mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
                     if sqmaze[mazex][mazey] == 1:
-                        if globals.timer_r == 0:
-                            globals.start_t = time.time()
-                            globals.timer_r = 1
                         if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
                                 pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
@@ -220,6 +217,9 @@ def main():
                                 pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] + 1
                             if pathmaze[mazex][mazey + 1] > 0:
                                 pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] + 1
+                            if globals.timer_r == 0:
+                                globals.start_t = time.time()
+                                globals.timer_r = 1
                             pathmaze[mazex][mazey] = 1
                             sqmaze[mazex][mazey] = 2
                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -251,13 +251,17 @@ def main():
                 button.handle_event(event)
 
             if buttons[0].clicked:
-                zoom += 1
                 globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                 globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
+                zoom += 1
+                globals.zoom_out = True
+                globals.zoom_in = True
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
             if buttons[1].clicked:
+                globals.zoom_in = False
+                globals.zoom_out = True
                 globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                 globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 zoom = max(1, zoom - 1)
@@ -265,25 +269,21 @@ def main():
                 pygame.event.clear
 
             if buttons[2].clicked:
+                globals.timer_r = 0
                 reset(rows, cols, sqmaze, pathmaze, startpos)
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 pygame.event.clear
 
             if buttons[3].clicked:
                 if solver == 0:
-                    solver_text = 'A*'
                     solver = 1
                 elif solver == 1:
-                    solver_text = 'DFS'
                     solver = 2
                 elif solver == 2:
-                    solver_text = 'BFS'
                     solver = 3
                 elif solver == 3:
-                    solver_text = 'Dijkstra'
                     solver = 4
                 elif solver == 4:
-                    solver_text = 'GBFS'
                     solver = 0
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 pygame.event.clear
@@ -318,6 +318,7 @@ def main():
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 
             if buttons[5].clicked:
+                globals.timer_r = 0
                 sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
                 globals.path_nmbr = 0
                 for i in range(rows * 2 + 1):
