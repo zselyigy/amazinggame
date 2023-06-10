@@ -36,37 +36,6 @@ class Player:
     def __init__(self, name):
         self.name = name
 
-def display_endgame():
-    font = pygame.font.SysFont(None, 40)
-    rect = pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4)
-    pygame.draw.rect(globals.screen, (150, 00, 00), rect)
-    text_surf = font.render('Congratulation! You won!', True, (10, 10, 10))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(10, 10, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-
-
-def display_endgame_solved():
-    font = pygame.font.SysFont(None, 40)
-    rect = pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4)
-    pygame.draw.rect(globals.screen, (150, 00, 00), rect)
-    text_surf = font.render('Congratulation! The algorithm solved the maze!', True, (10, 10, 10))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(10, 10, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-
 def reset(rows, cols, sqmaze, pathmaze, startpos):
     for i in range(2*rows+1):
         for j in range(2*cols+1):
@@ -260,7 +229,7 @@ def main():
                                         if sqmaze[i][j] == 2:
                                             sqmaze[i][j] = 5
                                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                                display_endgame()
+                                display.display_endgame()
                                 globals.timer_r = 0
                                 pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:
@@ -344,7 +313,7 @@ def main():
                 sqmaze[2 * rows - 1][endpos] = 4
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 globals.timer_r = 0
-                display_endgame_solved()
+                display.display_endgame_solved()
                 pygame.display.flip()
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 

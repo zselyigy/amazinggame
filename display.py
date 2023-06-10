@@ -234,6 +234,14 @@ def solved_display():
     text_rect = text_surf.get_rect(center=rect.center)
     globals.screen.blit(text_surf, text_rect)
 
+def display_endgame():
+    textDisplay('Congratulation! You won!', 40, pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4), (150, 00, 00), (10, 10, 10))
+    textDisplay('Time: ' + str(globals.time), 20, pygame.Rect(10, 10, 170, 30), (50, 50, 50), (255, 255, 255))
+
+def display_endgame_solved():
+    textDisplay('Congratulation! The algorithm solved the maze!', 40, pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4), (150, 0, 0), (255, 255, 255))
+    textDisplay('Time: ' + str(globals.time), 20, pygame.Rect(10, 10, 170, 30), (50, 50, 50), (255, 255, 255))
+
 def timer():
     font = pygame.font.SysFont(None, 20)
     rect = pygame.Rect(10, 10, 170, 30)
