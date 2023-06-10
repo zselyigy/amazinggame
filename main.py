@@ -127,133 +127,7 @@ class InputBox_Playername(InputBox_string):
         self.startscreen_display()
         pygame.display.flip()
 
-class baseButton:
-    def __init__(self, text, x, y, width, height):
-        self.text = text
-        self.rect = pygame.Rect(x, y, width, height)
-        self.color = (50, 50, 50)
-        self.hover_color = (25, 25, 25)
-        self.fontsize = 20
-        self.font = pygame.font.SysFont(None, self.fontsize)
-        self.clicked = False
-
-    def draw(self):
-        color = self.hover_color if self.clicked else self.color
-        display.textDisplay(self.text, self.fontsize, self.rect, color, (255, 255, 255))
-
-
-class Button(baseButton):
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and self.rect.collidepoint(event.pos):
-                self.clicked = True
-                self.draw()
-        elif event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:
-                self.clicked = False
-                self.draw()
-
-class GameModeButton(baseButton):
-    def __init__(self, textarray, x, y, width, height):
-        self.textarray = textarray
-        self.counter = 0
-        self.text=self.textarray[self.counter]
-        super().__init__(self.text, x, y, width, height)
-#        self.allowed_gamemodes = ['Solve the maze']
-        self.allowed_gamemodes = ['Solve the maze','Time limited','Speed run']
-
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and self.rect.collidepoint(event.pos):
-                self.clicked = True
-                notfound = True
-                while notfound:
-                    if self.counter==len(self.textarray)-1:
-                        self.counter=0
-                    else:
-                        self.counter = self.counter + 1
-                    if self.textarray[self.counter] in self.allowed_gamemodes:
-                        notfound = False
-                self.text=self.textarray[self.counter]
-                self.draw()
-        elif event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:
-                self.clicked = False
-                self.draw()
-
-
-def button_draw(buttons):
-        for button in buttons:
-            button.draw()
-
-def zoomlevel_diplay(zoom_level):
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Zoom level: ' + str(zoom_level), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-def solved_display():
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text = "Maze explored: {:.2f}%"
-    text_surf = font.render(text.format(globals.percentage), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-def solver_diplay(searched_text):
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-180, 90, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Solver: ' + str(searched_text), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-def display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text):
-    display.draw(sqmaze, offset_x, offset_y, zoom, rows, cols)
-    button_draw(buttons)
-    zoomlevel_diplay(zoom)
-    solver_diplay(solver_text)
-    solved_display()
-    timer()
-    if update == 0:
-        pygame.display.flip()
-    elif update == 1:
-        pygame.display.update()
-
-def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze):
-    color = (0, 0, 0)
-    if sqmaze[i][j] == 1:
-        color = globals.path          
-    if sqmaze[i][j] == 2:
-        color = globals.sel_path
-    if sqmaze[i][j] == 3:
-        color = globals.start_c
-    if sqmaze[i][j] == 4:
-        color = globals.end_c
-    if sqmaze[i][j] == 5:
-        color = globals.fin_path
-    if sqmaze[i][j] == 6:
-        color = globals.alg_s
-    if color != (0, 0, 0):
-        pygame.draw.line(globals.screen,color,
-            ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y + globals.centre_y) * zoom),
-            ((i+offset_x + globals.centre_x) *  zoom, (j+offset_y+1 + globals.centre_y) * zoom-1),
-            zoom)
-    update_rect = [pygame.Rect((i+offset_x + globals.centre_x) *  zoom-(((zoom/3)+(zoom-1)/5)-1), (j+offset_y + globals.centre_y) * zoom, zoom+((zoom/3)+(zoom-1)/5), zoom), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
-    solved_display()
-    pygame.display.update(update_rect)  
-
-def display_timer():
-    if globals.timer_r == 1:
-        globals.time = round(time.time()-globals.start_t, 3)
-    update_rect = pygame.Rect(10, 10, 170, 30)
-    timer()
-    pygame.display.update(update_rect) 
-
-def endgame_display():
+def display_endgame():
     font = pygame.font.SysFont(None, 40)
     rect = pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4)
     pygame.draw.rect(globals.screen, (150, 00, 00), rect)
@@ -269,7 +143,7 @@ def endgame_display():
 
 
 
-def endgame_display_solved():
+def display_endgame_solved():
     font = pygame.font.SysFont(None, 40)
     rect = pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4)
     pygame.draw.rect(globals.screen, (150, 00, 00), rect)
@@ -316,15 +190,6 @@ def generate_maze(rows, cols, seed, seed_enabled):
             something = False
     return sqmaze, pathmaze, startpos, endpos
 
-def timer():
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(10, 10, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Time: ' + str(globals.time), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-
 def main():
     globals.global_init()
 # Initialize pygame
@@ -354,9 +219,9 @@ def main():
 # setting up the start screen
 # main buttons
     startscreen_buttons = []
-    startscreen_buttons.append(Button('Start game', (window_width-100)/2, (window_height-30)/2, 100, 30))
-    startscreen_buttons.append(Button('Quit', (window_width-100)/2, (window_height-30)/2 + 40, 100, 30))    
-    startscreen_buttons.append(GameModeButton(['Solve the maze','Time limited','Speed run'], pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 4*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_buttons.append(display.Button('Start game', (window_width-100)/2, (window_height-30)/2, 100, 30))
+    startscreen_buttons.append(display.Button('Quit', (window_width-100)/2, (window_height-30)/2 + 40, 100, 30))    
+    startscreen_buttons.append(display.GameModeButton(['Solve the maze','Time limited','Speed run'], pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 4*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
     for button in startscreen_buttons:
         button.draw()
 # plain texts
@@ -447,22 +312,14 @@ def main():
                 globals.path_nmbr = globals.path_nmbr + 1
 
 # setting up the start ingame screen 
-    ingame_button_height = 30
     buttons = []
-    buttons.append(Button('Zoom In', pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Change Solver',pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))    
-    buttons.append(Button('Solve',pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-#Draw maze on screen
-    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+# Setup and draw the ingame screen
+    display.ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
 #Handle pygame events
     running = True
     pygame.key.set_repeat(200, 50)
     while running:
-        display_timer()
+        display.display_timer()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -470,26 +327,26 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     offset_x -= 1
-                    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_RIGHT:
                     offset_x += 1
-                    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_UP:
                     offset_y -= 1
-                    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_DOWN:
                     offset_y += 1
-                    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
                     zoom += 1
                     globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                     globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
-                    display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
                     globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                     globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
-                    display_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
                 mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
@@ -509,14 +366,14 @@ def main():
                                 pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] + 1
                             pathmaze[mazex][mazey] = 1
                             sqmaze[mazex][mazey] = 2
-                            display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                             if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
                                 for i in range(2*rows+1):
                                     for j in range(2*cols+1):
                                         if sqmaze[i][j] == 2:
                                             sqmaze[i][j] = 5
-                                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                                endgame_display()
+                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                display_endgame()
                                 globals.timer_r = 0
                                 pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:
@@ -532,7 +389,7 @@ def main():
                             pathmaze[mazex][mazey] = 0
                             sqmaze[mazex][mazey] = 1
                             globals.timer_r = 0
-                            display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
@@ -541,19 +398,19 @@ def main():
                 zoom += 1
                 globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                 globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
             if buttons[1].clicked:
                 globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
                 globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 zoom = max(1, zoom - 1)
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
             if buttons[2].clicked:
                 reset(rows, cols, sqmaze, pathmaze, startpos)
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 pygame.event.clear
 
             if buttons[3].clicked:
@@ -572,7 +429,7 @@ def main():
                 elif solver == 4:
                     solver_text = 'GBFS'
                     solver = 0
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 pygame.event.clear
 
 
@@ -583,7 +440,7 @@ def main():
                 if globals.timer_r == 0:
                     globals.start_t = time.time()
                     globals.timer_r = 1
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 if solver == 0:
                     solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
                 if solver == 1:
@@ -598,9 +455,9 @@ def main():
                     sqmaze[so[0]][so[1]] = 5
                 sqmaze[1][startpos] = 3
                 sqmaze[2 * rows - 1][endpos] = 4
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 globals.timer_r = 0
-                endgame_display_solved()
+                display_endgame_solved()
                 pygame.display.flip()
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 
@@ -611,7 +468,7 @@ def main():
                     for j in range(cols * 2 + 1):
                         if sqmaze[i][j] == 1:
                             globals.path_nmbr = globals.path_nmbr + 1
-                display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
 

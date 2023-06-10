@@ -3,6 +3,7 @@ import main
 import time
 import globals
 import decimal
+import display
 
 def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Define the heuristic function
@@ -50,8 +51,8 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            main.display_timer()
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
 
@@ -121,8 +122,8 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            main.display_timer()
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
         # Expand the node's neighbors
@@ -193,8 +194,8 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            main.display_timer()
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
         # Expand the node's neighbors
@@ -262,8 +263,8 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            main.display_timer()
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
         # Expand the node's neighbors
@@ -328,8 +329,8 @@ def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            main.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
-            main.display_timer()
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
         # Expand the node's neighbors
