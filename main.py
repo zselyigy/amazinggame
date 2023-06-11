@@ -7,6 +7,7 @@ import numpy
 import solve
 import globals
 import time
+import math
 try:
     import cPickle as pickle
 except:
@@ -81,7 +82,6 @@ def main():
     cols = MyConfig.last_cols
     seed_enabled = False
     seed = 1683387020
-    offset_x, offset_y = 0, 0
     solver = 0
     solver_text = 'GBFS'
     globals.timer_r = 0
@@ -153,6 +153,15 @@ def main():
         globals.centre_y = 0
         globals.centre_x = pygame.display.Info().current_w // zoom // 2 - cols
 
+    # new
+    globals.sc_x = pygame.display.Info().current_w // 2
+    globals.sc_y = pygame.display.Info().current_h // 2
+    globals.mc_x = cols / 2
+    globals.mc_y = rows / 2
+    offset_x = -1 * cols // 2
+    offset_y = -1 * rows // 2
+
+
     # globals.centre_y = ((pygame.display.Info().current_h // (pygame.display.Info().current_h // (2 * rows + 1)) // 2) - rows)
     # globals.centre_x = ((pygame.display.Info().current_w // (pygame.display.Info().current_w // (2 * cols + 1)) // 2) - cols)
 
@@ -204,8 +213,10 @@ def main():
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
-                mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
+                # mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
+                # mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
+                mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
+                mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
                     if sqmaze[mazex][mazey] == 1:
                         if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
