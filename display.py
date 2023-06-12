@@ -11,33 +11,6 @@ def textDisplay(text, fontsize, rect, bgcolor, tcolor):
     globals.screen.blit(text_surf, text_rect)
     pygame.display.update(rect)
 
-def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols):
-    for i in range(2*rows+1):
-        for j in range(2*cols+1):
-            color = (0, 0, 0)
-            if sqmaze[i][j] == 1:
-                color = globals.path          
-            if sqmaze[i][j] == 2:
-                color = globals.sel_path
-            if sqmaze[i][j] == 3:
-                color = globals.start_c
-            if sqmaze[i][j] == 4:
-                color = globals.end_c
-            if sqmaze[i][j] == 5:
-                color = globals.fin_path
-            if sqmaze[i][j] == 6:
-                color = globals.alg_s
-            if color != (0, 0, 0):
-                pygame.draw.line(globals.screen, color,
-                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
-                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
-                    zoom)
-
-def draw(sqmaze, offset_x, offset_y, zoom, rows, cols):
-    globals.screen.fill((0, 0, 0))
-    draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols)
-
-
 class InputBox:
     def __init__(self, text, x, y, width, height,digits):
         self.text = text
@@ -278,6 +251,32 @@ def start_screen(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer):
     # show the screen
     pygame.display.flip()
 
+def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols):
+    for i in range(2*rows+1):
+        for j in range(2*cols+1):
+            color = (0, 0, 0)
+            if sqmaze[i][j] == 1:
+                color = globals.path          
+            if sqmaze[i][j] == 2:
+                color = globals.sel_path
+            if sqmaze[i][j] == 3:
+                color = globals.start_c
+            if sqmaze[i][j] == 4:
+                color = globals.end_c
+            if sqmaze[i][j] == 5:
+                color = globals.fin_path
+            if sqmaze[i][j] == 6:
+                color = globals.alg_s
+            if color != (0, 0, 0):
+                pygame.draw.line(globals.screen, color,
+                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
+                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
+                    zoom)
+
+def draw(sqmaze, offset_x, offset_y, zoom, rows, cols):
+    globals.screen.fill((0, 0, 0))
+    draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols)
+
 
 def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text):
     ingame_button_height = 30
@@ -317,11 +316,11 @@ def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze):
     if sqmaze[i][j] == 6:
         color = globals.alg_s
     if color != (0, 0, 0):
-        pygame.draw.line(globals.screen,color,
-            (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y)),
-            (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 1)),
-            zoom)
+            pygame.draw.line(globals.screen, color,
+                (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
+                (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
+                zoom)
 #    update_rect = [pygame.Rect((i+offset_x + globals.centre_x) *  zoom-(((zoom/3)+(zoom-1)/5)-1), (j+offset_y + globals.centre_y) * zoom, zoom+((zoom/3)+(zoom-1)/5), zoom), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
-    update_rect = [pygame.Rect(globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y), zoom, zoom), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
+    update_rect = [pygame.Rect(globals.sc_x + zoom * (i - globals.mc_x + offset_x - 0.5), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5), zoom + 1, zoom + 1), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
     solved_display()
     pygame.display.update(update_rect)  

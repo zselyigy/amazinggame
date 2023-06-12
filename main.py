@@ -146,24 +146,13 @@ def main():
     zoom_y = pygame.display.Info().current_h // (2 * rows)
     zoom_x = pygame.display.Info().current_w // (2 * cols)
     zoom = min(zoom_x,zoom_y)
-    if zoom_y >= zoom_x:
-        globals.centre_y = pygame.display.Info().current_h // zoom // 2 - rows
-        globals.centre_x = 0
-    else:
-        globals.centre_y = 0
-        globals.centre_x = pygame.display.Info().current_w // zoom // 2 - cols
 
-    # new
     globals.sc_x = pygame.display.Info().current_w // 2
     globals.sc_y = pygame.display.Info().current_h // 2
     globals.mc_x = cols / 2
     globals.mc_y = rows / 2
     offset_x = -1 * cols // 2
     offset_y = -1 * rows // 2
-
-
-    # globals.centre_y = ((pygame.display.Info().current_h // (pygame.display.Info().current_h // (2 * rows + 1)) // 2) - rows)
-    # globals.centre_x = ((pygame.display.Info().current_w // (pygame.display.Info().current_w // (2 * cols + 1)) // 2) - cols)
 
     temp = rows
     rows = cols
@@ -203,18 +192,12 @@ def main():
                     offset_y += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
-                    globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
-                    globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                     zoom += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
-                    globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
-                    globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # mazex = int((event.pos[0] + zoom / 2) // zoom - (offset_x+globals.centre_x))
-                # mazey = int((event.pos[1]) // zoom - (offset_y+globals.centre_y))
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
@@ -262,19 +245,11 @@ def main():
                 button.handle_event(event)
 
             if buttons[0].clicked:
-                globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
-                globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 zoom += 1
-                globals.zoom_out = True
-                globals.zoom_in = True
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
 
             if buttons[1].clicked:
-                globals.zoom_in = False
-                globals.zoom_out = True
-                globals.centre_y = ((pygame.display.Info().current_h / zoom / 2) - rows)
-                globals.centre_x = ((pygame.display.Info().current_w / zoom / 2) - cols)
                 zoom = max(1, zoom - 1)
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 pygame.event.clear
