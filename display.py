@@ -153,11 +153,11 @@ class SelfScrollButton(baseButton):
 class GameModeButton(baseButton):
     def __init__(self, textarray, x, y, width, height):
         self.textarray = textarray
-        self.counter = 0
-        self.text=self.textarray[self.counter]
+        self.counter = self.textarray.index(globals.gamemode_text)
+        self.text=globals.gamemode_text
         super().__init__(self.text, x, y, width, height)
 #        self.allowed_gamemodes = ['Solve the maze']
-        self.allowed_gamemodes = ['Solve the maze','Time limited','Speed run']
+        self.allowed_gamemodes = [globals.gamemode_solvethemaze,globals.gamemode_timelimited,globals.gamemode_speedrun]
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -214,7 +214,7 @@ def start_screen(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer):
     # startescreen buttons
     startscreen_buttons.append(Button('Start game', (pygame.display.Info().current_w-100)/2, (pygame.display.Info().current_h-30)/2, 100, 30))
     startscreen_buttons.append(Button('Quit', (pygame.display.Info().current_w-100)/2, (pygame.display.Info().current_h-30)/2 + 40, 100, 30))    
-    startscreen_buttons.append(GameModeButton(['Solve the maze','Time limited','Speed run'], pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 4*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
+    startscreen_buttons.append(GameModeButton([globals.gamemode_solvethemaze,globals.gamemode_timelimited,globals.gamemode_speedrun], pygame.display.Info().current_w-globals.setup_screen_fontsize*5, 4*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10))
     for button in startscreen_buttons:
         button.draw()
     # plain texts

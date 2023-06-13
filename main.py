@@ -21,6 +21,7 @@ class gameConfig():
             self.last_player = 'Player'
             self.last_rows = 10
             self.last_cols = 5
+            self.last_gamemode = globals.gamemode_solvethemaze
 
     def save(self):
         file = open('game.cfg','wb')
@@ -80,6 +81,7 @@ def main():
 # Define variables needed
     rows = MyConfig.last_rows
     cols = MyConfig.last_cols
+    globals.gamemode_text = MyConfig.last_gamemode
     seed_enabled = False
     seed = 1683387020
     solver = 0
@@ -135,10 +137,12 @@ def main():
         seed_enabled = False
         startscreen_inputs[2].text = '0'
     seed=int(startscreen_inputs[2].text)
+    globals.gamemode_text = startscreen_buttons[2].text
 
     MyConfig.last_player = MyPlayer.name
     MyConfig.last_rows = rows
     MyConfig.last_cols = cols
+    MyConfig.last_gamemode = globals.gamemode_text
     MyConfig.save()
 
 
