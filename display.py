@@ -178,23 +178,6 @@ class GameModeButton(baseButton):
                 self.clicked = False
                 self.draw()
 
-
-def zoomlevel_diplay(zoom_level):
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Zoom level: ' + str(zoom_level), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
-def solver_diplay(searched_text):
-    font = pygame.font.SysFont(None, 20)
-    rect = pygame.Rect(pygame.display.Info().current_w-180, 90, 170, 30)
-    pygame.draw.rect(globals.screen, (50, 50, 50), rect)
-    text_surf = font.render('Solver: ' + str(searched_text), True, (255, 255, 255))
-    text_rect = text_surf.get_rect(center=rect.center)
-    globals.screen.blit(text_surf, text_rect)
-
 def solved_display():
     font = pygame.font.SysFont(None, 20)
     rect = pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)
@@ -293,7 +276,7 @@ def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons,
     draw(sqmaze, offset_x, offset_y, zoom, rows, cols)
     for button in buttons:
         button.draw()
-    zoomlevel_diplay(zoom)
+    textDisplay('Zoom level: ' + str(zoom), 20, pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30), (50, 50, 50), (255, 255, 255))
     solved_display()
     timer()
     if update == 0:

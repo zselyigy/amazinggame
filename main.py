@@ -261,15 +261,8 @@ def main():
                 pygame.event.clear
 
             if buttons[3].clicked:
-                if solver == 0:
-                    solver = 1
-                elif solver == 1:
-                    solver = 2
-                elif solver == 2:
-                    solver = 3
-                elif solver == 3:
-                    solver = 4
-                elif solver == 4:
+                solver = solver + 1
+                if solver == 4:
                     solver = 0
                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                 pygame.event.clear
