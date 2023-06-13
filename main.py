@@ -179,16 +179,16 @@ def main():
                 running = False
 # keydown events
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_a:
                     offset_x -= 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_d:
                     offset_x += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_w:
                     offset_y -= 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_s:
                     offset_y += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                 elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
@@ -201,7 +201,7 @@ def main():
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                    if sqmaze[mazex][mazey] == 1:
+                    if sqmaze[mazex][mazey] == 1:    # the tile is empty. check if selectable or not
                         if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
                                 pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
@@ -217,6 +217,7 @@ def main():
                             pathmaze[mazex][mazey] = 1
                             sqmaze[mazex][mazey] = 2
                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                            # check if the maze is solved
                             if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
                                 for i in range(2*rows+1):
                                     for j in range(2*cols+1):
@@ -226,7 +227,7 @@ def main():
                                 display.display_endgame()
                                 globals.timer_r = 0
                                 pygame.display.flip()
-                    elif sqmaze[mazex][mazey] == 2:
+                    elif sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
                         if pathmaze[mazex][mazey] == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
                                 pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] - 1
