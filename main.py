@@ -12,6 +12,7 @@ try:
     import cPickle as pickle
 except:
     import pickle
+import os
 
 class gameConfig():
     def __init__(self):
@@ -37,6 +38,25 @@ class gameConfig():
 class Player:
     def __init__(self, name):
         self.name = name
+        if not os.path.isdir("player_data"):
+            os.makedirs("player_data")
+            self.save()
+        try:
+            self.load()
+        except:
+            self.save()
+
+    def save(self):
+        file = open('.\\player_data\\'+self.name+'.dat','wb')
+        file.write(pickle.dumps(self.__dict__))
+        file.close()
+
+    def load(self):
+        file = open('.\\player_data\\'+self.name+'.dat','rb')
+        dataPickle = file.read()
+        file.close()
+        self.__dict__ = pickle.loads(dataPickle)
+
 
 def reset(rows, cols, sqmaze, pathmaze, startpos):
     for i in range(2*rows+1):
@@ -144,6 +164,7 @@ def main():
     MyConfig.last_cols = cols
     MyConfig.last_gamemode = globals.gamemode_text
     MyConfig.save()
+    MyPlayer.save()
 
 
 # display parameters
