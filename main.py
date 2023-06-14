@@ -13,6 +13,7 @@ try:
 except:
     import pickle
 import os
+from datetime import datetime
 
 class gameConfig():
     def __init__(self):
@@ -35,9 +36,17 @@ class gameConfig():
         file.close()
         self.__dict__ = pickle.loads(dataPickle)
 
+class maze_record:
+    def __init__(self, date, cols, rows, solvtime):
+        self.date = date
+        self.cols = cols
+        self.rows = rows
+        self.solvtime = solvtime
+
 class Player:
     def __init__(self, name):
         self.name = name
+        self.records = []
         if not os.path.isdir("player_data"):
             os.makedirs("player_data")
             self.save()
@@ -57,6 +66,8 @@ class Player:
         file.close()
         self.__dict__ = pickle.loads(dataPickle)
 
+    def add_record(self, date, cols, rows, solvtime):
+        self.records.append(maze_record(date, cols, rows, solvtime))
 
 def reset(rows, cols, sqmaze, pathmaze, startpos):
     for i in range(2*rows+1):
@@ -159,12 +170,14 @@ def main():
     seed=int(startscreen_inputs[2].text)
     globals.gamemode_text = startscreen_buttons[2].text
 
-    MyConfig.last_player = MyPlayer.name
+    if MyConfig.last_player != MyPlayer.name:
+        MyConfig.last_player = MyPlayer.name
+        MyPlayer.save()
+
     MyConfig.last_rows = rows
     MyConfig.last_cols = cols
     MyConfig.last_gamemode = globals.gamemode_text
     MyConfig.save()
-    MyPlayer.save()
 
 
 # display parameters
@@ -252,6 +265,9 @@ def main():
                                             sqmaze[i][j] = 5
                                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                 display.display_endgame()
+
+                                MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                                MyPlayer.save()
                                 globals.timer_r = 0
                                 pygame.display.flip()
                     elif sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
