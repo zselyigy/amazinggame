@@ -265,11 +265,12 @@ def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update,
     ingame_button_height = 30
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(SelfScrollButton(['Solver: GBFS','Solver: A*','Solver: DFS','Solver: BFS','Solver: Dijkstra'], pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
-    buttons.append(Button('Solve',pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Center maze',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(SelfScrollButton(['Solver: GBFS','Solver: A*','Solver: DFS','Solver: BFS','Solver: Dijkstra'], pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
+    buttons.append(Button('Solve',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 8*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text)
 
 def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text):
