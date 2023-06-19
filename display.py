@@ -277,7 +277,8 @@ def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons,
     draw(sqmaze, offset_x, offset_y, zoom, rows, cols)
     for button in buttons:
         button.draw()
-    textDisplay('Zoom level: ' + str(zoom), 20, pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30), (50, 50, 50), (255, 255, 255))
+    textDisplay(globals.gamemode_text, 20, pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30), (0, 0, 0), (255, 255, 255))
+    textDisplay('Zoom level: ' + str(zoom), 20, pygame.Rect(pygame.display.Info().current_w-180, pygame.display.Info().current_h-35, 170, 30), (0, 0, 0), (255, 255, 255))
     solved_display()
     timer()
     if update == 0:

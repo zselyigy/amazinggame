@@ -69,6 +69,34 @@ class Player:
     def add_record(self, date, cols, rows, solvtime):
         self.records.append(maze_record(date, cols, rows, solvtime))
 
+class BestRecords:
+    def __init__(self):
+        self.bestrecords_solve = []
+        try:
+            self.load()
+        except:
+            self.save()
+
+    def save(self):
+        file = open('bestrecords','wb')
+        file.write(pickle.dumps(self.__dict__))
+        file.close()
+
+    def load(self):
+        file = open('bestrecords','rb')
+        dataPickle = file.read()
+        file.close()
+        self.__dict__ = pickle.loads(dataPickle)
+
+    def add_record(self, gamemode, date, cols, rows, solvtime):
+        match gamemode:
+            case globals.gamemode_solvethemaze:
+                self.bestrecords_solve.append(maze_record(date, cols, rows, solvtime))
+            case globals.gamemode_timelimited:
+                pass
+            case globals.gamemode_speedrun:
+                pass
+
 def reset(rows, cols, sqmaze, pathmaze, startpos):
     for i in range(2*rows+1):
         for j in range(2*cols+1):
