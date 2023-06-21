@@ -320,80 +320,89 @@ def main():
                 button.handle_event(event)
             # zoom in button
             if buttons[0].clicked:
-                zoom += 1
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                pygame.event.clear
+                    zoom += 1
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 
             # zoom out button
             if buttons[1].clicked:
-                zoom = max(1, zoom - 1)
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                pygame.event.clear
+                    zoom = max(1, zoom - 1)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
 
             # center maze
             if buttons[2].clicked:
-                zoom = zoom_init
-                globals.mc_y = cols / 2
-                globals.mc_x = rows / 2
-                offset_y = -1 * cols // 2
-                offset_x = -1 * rows // 2
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                pygame.event.clear
+                if button.counter == 1:
+                    zoom = zoom_init
+                    globals.mc_y = cols / 2
+                    globals.mc_x = rows / 2
+                    offset_y = -1 * cols // 2
+                    offset_x = -1 * rows // 2
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    button.counter = 0
 
             # restart maze solving
             if buttons[3].clicked:
-                globals.timer_r = 0
-                reset(rows, cols, sqmaze, pathmaze, startpos)
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                pygame.event.clear
+                if button.counter == 1:
+                    globals.timer_r = 0
+                    reset(rows, cols, sqmaze, pathmaze, startpos)
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    button.counter = 0
 
             # solver selection
             if buttons[4].clicked:
-                solver = solver + 1
-                if solver == 4:
-                    solver = 0
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                pygame.event.clear
+                if button.counter == 1:
+                    solver = solver + 1
+                    if solver == 4:
+                        solver = 0
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    button.counter = 0
 
             # solve the maze
             if buttons[5].clicked:
-                reset(rows, cols, sqmaze, pathmaze, startpos)
-                globals.alg_sp = 0
-                if globals.timer_r == 0:
-                    globals.start_t = time.time()
-                    globals.timer_r = 1
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                if solver == 0:
-                    solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
-                if solver == 1:
-                    solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
-                if solver == 2:
-                    solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
-                if solver == 3:
-                    solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
-                if solver == 4:
-                    solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
-                for so in solution:
-                    sqmaze[so[0]][so[1]] = 5
-                sqmaze[1][startpos] = 3
-                sqmaze[2 * rows - 1][endpos] = 4
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                globals.timer_r = 0
-                display.display_endgame_solved()
-                pygame.display.flip()
-                pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    if button.counter == 1:
+                        reset(rows, cols, sqmaze, pathmaze, startpos)
+                        globals.alg_sp = 0
+                        if globals.timer_r == 0:
+                            globals.start_t = time.time()
+                            globals.timer_r = 1
+                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                        if solver == 0:
+                            solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                        if solver == 1:
+                            solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                        if solver == 2:
+                            solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                        if solver == 3:
+                            solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                        if solver == 4:
+                            solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                        for so in solution:
+                            sqmaze[so[0]][so[1]] = 5
+                        sqmaze[1][startpos] = 3
+                        sqmaze[2 * rows - 1][endpos] = 4
+                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                        globals.timer_r = 0
+                        display.display_endgame_solved()
+                        pygame.display.flip()
+                        button.counter = 0
 
             # re-generate maze
             if buttons[6].clicked:
-                globals.timer_r = 0
-                sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
-                globals.path_nmbr = 0
-                for i in range(rows * 2 + 1):
-                    for j in range(cols * 2 + 1):
-                        if sqmaze[i][j] == 1:
-                            globals.path_nmbr = globals.path_nmbr + 1
-                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-                pygame.event.clear
+                if button.counter == 1:
+                    globals.timer_r = 0
+                    sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
+                    globals.path_nmbr = 0
+                    for i in range(rows * 2 + 1):
+                        for j in range(cols * 2 + 1):
+                            if sqmaze[i][j] == 1:
+                                globals.path_nmbr = globals.path_nmbr + 1
+                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    button.counter = 0
 
             # quit
             if buttons[7].clicked:

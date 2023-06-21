@@ -6,3 +6,5 @@
 1682354910 - nehéz
 1682355278 - very hard
 1683403916 - szivatós
+30*30 seed:
+1687373497 - girbegurba

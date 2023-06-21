@@ -104,6 +104,7 @@ class InputBox_Playername(InputBox_string):
 
 class baseButton:
     def __init__(self, text, x, y, width, height):
+        self.counter = 1
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color = (50, 50, 50)
@@ -127,6 +128,7 @@ class Button(baseButton):
             if event.button == 1:
                 self.clicked = False
                 self.draw()
+                self.counter = 1
 
 class SelfScrollButton(baseButton):
     def __init__(self, textarray, x, y, width, height):
