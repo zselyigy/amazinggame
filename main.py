@@ -265,7 +265,7 @@ def main():
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif pygame.mouse.get_pressed()[0] == True:
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                 if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
@@ -298,7 +298,11 @@ def main():
                                 MyPlayer.save()
                                 globals.timer_r = 0
                                 pygame.display.flip()
-                    elif sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
+            elif pygame.mouse.get_pressed()[2] == True:
+                mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
+                mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
+                if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
+                    if sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
                         if pathmaze[mazex][mazey] == 1:
                             if pathmaze[mazex - 1][mazey] > 0:
                                 pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] - 1
