@@ -314,7 +314,6 @@ def main():
                                 pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
                             pathmaze[mazex][mazey] = 0
                             sqmaze[mazex][mazey] = 1
-                            globals.timer_r = 0
                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
             for button in buttons:
