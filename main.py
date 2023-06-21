@@ -216,7 +216,6 @@ def main():
 
     globals.sc_x = pygame.display.Info().current_w // 2
     globals.sc_y = pygame.display.Info().current_h // 2
-
     temp = rows
     rows = cols
     cols = temp
@@ -232,6 +231,8 @@ def main():
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
+    mazex_last = 1
+    mazey_last = startpos
 
 # setting up the start ingame screen 
     buttons = []
@@ -402,6 +403,8 @@ def main():
                                 globals.path_nmbr = globals.path_nmbr + 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
                     pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                    mazex_last = 1
+                    mazey_last = startpos
                     button.counter = 0
 
             # quit
