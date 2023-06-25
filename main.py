@@ -14,6 +14,7 @@ except:
     import pickle
 import os
 from datetime import datetime
+import database
 
 class gameConfig():
     def __init__(self):
@@ -136,6 +137,8 @@ def main():
     pygame.display.set_caption('The Wonder of Mazes')
 
     MyConfig = gameConfig()
+
+    database.dbconnect()
 
 # Define variables needed
     rows = MyConfig.last_rows
