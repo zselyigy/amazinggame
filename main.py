@@ -268,7 +268,7 @@ def main():
             elif pygame.mouse.get_pressed()[0] == True:
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
-                if globals.kbmaction_text == "kbm_click_and_drag":
+                if globals.kbmaction_text == "Click and drag":
                     if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
                         if sqmaze[mazex][mazey] == 1:    # the tile is empty. check if selectable or not
                             if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
@@ -300,7 +300,7 @@ def main():
                                     globals.timer_r = 0
                                     pygame.display.flip()
             elif pygame.mouse.get_pressed()[2] == True:
-                if globals.kbmaction_text == "kbm_click_and_drag":
+                if globals.kbmaction_text == "Click and drag":
                     mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                     mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                     if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
@@ -406,8 +406,12 @@ def main():
                     pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                     button.counter = 0
 
-            # quit
+            # keyboard and mouse action selection
             if buttons[7].clicked:
+                globals.kbmaction_text = buttons[7].text
+
+            # quit
+            if buttons[8].clicked:
                 running = False
 
 
