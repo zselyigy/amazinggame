@@ -318,7 +318,8 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[mazex][j] = 1
                                                         sqmaze[mazex][j] = 2
-                                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         # check if the maze is solved
                                                         if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
                                                             for i in range(2*rows+1):
@@ -335,9 +336,11 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazex > 0:
                                                             if sqmaze[mazex-1][j] == 1:
+                                                                mazey_last = j
                                                                 break
                                                         if mazex < 2 * rows:
                                                             if sqmaze[mazex+1][j] == 1:
+                                                                mazey_last = j
                                                                 break
                                         else: # the y coordinate is the same, check the y direction
                                             for i in range(mazex_last+1,mazex,numpy.sign(mazex-mazex_last)):
@@ -350,7 +353,8 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[i][mazey] = 1
                                                         sqmaze[i][mazey] = 2
-                                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         # check if the maze is solved
                                                         if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
                                                             for i in range(2*rows+1):
@@ -367,9 +371,11 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazey > 0:
                                                             if sqmaze[i][mazey - 1] == 1:
+                                                                mazex_last = i
                                                                 break
                                                         if mazey < 2 * cols:
                                                             if sqmaze[i][mazey + 1] == 1:
+                                                                mazex_last = i
                                                                 break
             elif pygame.mouse.get_pressed()[2] == True:
                 if globals.kbmaction_text == "Click and drag":
