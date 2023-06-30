@@ -271,7 +271,7 @@ def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update,
     buttons.append(SelfScrollButton(['Solver: GBFS','Solver: A*','Solver: DFS','Solver: BFS','Solver: Dijkstra'], pygame.display.Info().current_w-180, 5*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
     buttons.append(Button('Solve',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    buttons.append(SelfScrollButton(['Click and drag','Click and drag 2','Arrows'], pygame.display.Info().current_w-180, 8*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
+    buttons.append(SelfScrollButton(['Click and drag','Click direction','Arrows'], pygame.display.Info().current_w-180, 8*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
     buttons.append(Button('Quit',pygame.display.Info().current_w-180, 9*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text)
 

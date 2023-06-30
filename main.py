@@ -232,6 +232,9 @@ def main():
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
+    mazex_last = 1
+    mazey_last = startpos
+
 
 # setting up the start ingame screen 
     buttons = []
@@ -301,50 +304,73 @@ def main():
                                         MyPlayer.save()
                                         globals.timer_r = 0
                                         pygame.display.flip()
-                    case "Click and drag 2":
+                    case "Click direction":
                         if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                    if sqmaze[mazex][mazey] == 1:    # the tile is empty. check if selectable or not
-                                        if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
-                                            if pathmaze[mazex - 1][mazey] > 0:
-                                                pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
-                                            if pathmaze[mazex + 1][mazey] > 0:
-                                                pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] + 1
-                                            if pathmaze[mazex][mazey - 1] > 0:
-                                                pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] + 1
-                                            if pathmaze[mazex][mazey + 1] > 0:
-                                                pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] + 1
-                                            if globals.timer_r == 0:
-                                                globals.start_t = time.time()
-                                                globals.timer_r = 1
-                                            pathmaze[mazex][mazey] = 1
-                                            sqmaze[mazex][mazey] = 2
-                                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                                            # check if the maze is solved
-                                            if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
-                                                for i in range(2*rows+1):
-                                                    for j in range(2*cols+1):
-                                                        if sqmaze[i][j] == 2:
-                                                            sqmaze[i][j] = 5
-                                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                                                display.display_endgame()
+                                    if not (mazex == mazex_last and mazey == mazey_last):
+                                        if mazex == mazex_last:   # the x coordinate is the same, check the y direction
+                                            for j in range(mazey_last+1,mazey,numpy.sign(mazey-mazey_last)):
+                                                match sqmaze[mazex][j]:
+                                                    case 0: # the next tile is wall, stop
+                                                        break
+                                                    case 1: # the tile is empty, we can move
+                                                        if globals.timer_r == 0:
+                                                            globals.start_t = time.time()
+                                                            globals.timer_r = 1
+                                                        pathmaze[mazex][j] = 1
+                                                        sqmaze[mazex][j] = 2
+                                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        # check if the maze is solved
+                                                        if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                                            for i in range(2*rows+1):
+                                                                for j in range(2*cols+1):
+                                                                    if sqmaze[i][j] == 2:
+                                                                        sqmaze[i][j] = 5
+                                                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                            display.display_endgame()
 
-                                                MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
-                                                MyPlayer.save()
-                                                globals.timer_r = 0
-                                                pygame.display.flip()
-                                    if sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
-                                        if pathmaze[mazex][mazey] == 1:
-                                            if pathmaze[mazex - 1][mazey] > 0:
-                                                pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] - 1
-                                            if pathmaze[mazex + 1][mazey] > 0:
-                                                pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] - 1
-                                            if pathmaze[mazex][mazey - 1] > 0:
-                                                pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] - 1
-                                            if pathmaze[mazex][mazey + 1] > 0:
-                                                pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
-                                            pathmaze[mazex][mazey] = 0
-                                            sqmaze[mazex][mazey] = 1
-                                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                            MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                                                            MyPlayer.save()
+                                                            globals.timer_r = 0
+                                                            pygame.display.flip()
+                                                        # check if we reached a crossing
+                                                        if mazex > 0:
+                                                            if sqmaze[mazex-1][j] == 1:
+                                                                break
+                                                        if mazex < 2 * rows:
+                                                            if sqmaze[mazex+1][j] == 1:
+                                                                break
+                                        else: # the y coordinate is the same, check the y direction
+                                            for i in range(mazex_last+1,mazex,numpy.sign(mazex-mazex_last)):
+                                                match sqmaze[i][mazey]:
+                                                    case 0: # the next tile is wall, stop
+                                                        break
+                                                    case 1: # the tile is empty, we can move
+                                                        if globals.timer_r == 0:
+                                                            globals.start_t = time.time()
+                                                            globals.timer_r = 1
+                                                        pathmaze[i][mazey] = 1
+                                                        sqmaze[i][mazey] = 2
+                                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                        # check if the maze is solved
+                                                        if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                                            for i in range(2*rows+1):
+                                                                for j in range(2*cols+1):
+                                                                    if sqmaze[i][j] == 2:
+                                                                        sqmaze[i][j] = 5
+                                                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                                            display.display_endgame()
+
+                                                            MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                                                            MyPlayer.save()
+                                                            globals.timer_r = 0
+                                                            pygame.display.flip()
+                                                        # check if we reached a crossing
+                                                        if mazey > 0:
+                                                            if sqmaze[i][mazey - 1] == 1:
+                                                                break
+                                                        if mazey < 2 * cols:
+                                                            if sqmaze[i][mazey + 1] == 1:
+                                                                break
             elif pygame.mouse.get_pressed()[2] == True:
                 if globals.kbmaction_text == "Click and drag":
                     mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
