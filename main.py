@@ -268,10 +268,15 @@ def main():
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
+            elif event.type == pygame.MOUSEMOTION:
+                display.textDisplay(str(math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+                display.textDisplay(str(math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
             elif pygame.mouse.get_pressed()[0] == True:
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
+                display.textDisplay(str(math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 11*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+                display.textDisplay(str(math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 11*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                 match globals.kbmaction_text:
                     case "Click and drag":
                         if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
@@ -318,10 +323,24 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[mazex][j] = 1
                                                         sqmaze[mazex][j] = 2
-                                                        # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                                         display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
+                                                        # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                                         # check if the maze is solved
-                                                        if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                                        masolved = False
+                                                        if mazex > 0:
+                                                           if sqmaze[mazex - 1][j] == 4:
+                                                               masolved = True
+                                                        if mazex < 2*rows + 1:
+                                                           if sqmaze[mazex + 1][j] == 4:
+                                                               masolved = True
+                                                        if j > 0:
+                                                           if sqmaze[mazex][j - 1] == 4:
+                                                               masolved = True
+                                                        if j < 2*cols + 1:
+                                                           if sqmaze[mazex][j + 1] == 4:
+                                                               masolved = True
+
+                                                        if masolved:
                                                             for i in range(2*rows+1):
                                                                 for j in range(2*cols+1):
                                                                     if sqmaze[i][j] == 2:
@@ -353,10 +372,24 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[i][mazey] = 1
                                                         sqmaze[i][mazey] = 2
+                                                        display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze)
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
-                                                        display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         # check if the maze is solved
-                                                        if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                                        masolved = False
+                                                        if i > 0:
+                                                           if sqmaze[i - 1][mazey] == 4:
+                                                               masolved = True
+                                                        if i < 2*rows + 1:
+                                                           if sqmaze[i + 1][mazey] == 4:
+                                                               masolved = True
+                                                        if mazey > 0:
+                                                           if sqmaze[i][mazey - 1] == 4:
+                                                               masolved = True
+                                                        if mazey < 2*cols + 1:
+                                                           if sqmaze[i][mazey + 1] == 4:
+                                                               masolved = True
+
+                                                        if masolved:
                                                             for i in range(2*rows+1):
                                                                 for j in range(2*cols+1):
                                                                     if sqmaze[i][j] == 2:
@@ -378,7 +411,7 @@ def main():
                                                                 mazex_last = i
                                                                 break
             elif pygame.mouse.get_pressed()[2] == True:
-                if globals.kbmaction_text == "Click and drag":
+                if globals.kbmaction_text == "Click and drag" or globals.kbmaction_text == "Click direction":
                     mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                     mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                     if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
@@ -394,7 +427,9 @@ def main():
                                     pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
                                 pathmaze[mazex][mazey] = 0
                                 sqmaze[mazex][mazey] = 1
-                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
+                                display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze)
+
+#                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
             for button in buttons:
                 button.handle_event(event)
