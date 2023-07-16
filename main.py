@@ -232,8 +232,8 @@ def main():
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
-    mazex_last = 1
-    mazey_last = startpos
+    mypath = []
+    mypath.append([1,startpos])
 
 
 # setting up the start ingame screen 
@@ -269,8 +269,8 @@ def main():
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, solver_text)
             elif event.type == pygame.MOUSEMOTION:
-                display.textDisplay(str(mazex_last), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
-                display.textDisplay(str(mazey_last), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+                display.textDisplay(str(mypath[-1][0]), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
+                display.textDisplay(str(mypath[-1][1]), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                 display.textDisplay(str(math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 11*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                 display.textDisplay(str(math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 11*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
             elif pygame.mouse.get_pressed()[0] == True:
@@ -297,6 +297,7 @@ def main():
                                         globals.timer_r = 1
                                     pathmaze[mazex][mazey] = 1
                                     sqmaze[mazex][mazey] = 2
+                                    mypath.append([mazex,mazey])
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                     # check if the maze is solved
                                     if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
@@ -313,10 +314,10 @@ def main():
                                         pygame.display.flip()
                     case "Click direction":
                         if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                    if not (mazex == mazex_last and mazey == mazey_last):
-                                        if mazex == mazex_last:   # the x coordinate is the same, check the y direction
-                                            cds = numpy.sign(mazey - mazey_last)   # determines the direction of click
-                                            for j in range(mazey_last + cds, mazey, cds):
+                                    if not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
+                                        if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
+                                            cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
+                                            for j in range(mypath[-1][1] + cds, mazey, cds):
                                                 match sqmaze[mazex][j]:
                                                     case 0: # the next tile is wall, stop
                                                         break
@@ -326,6 +327,7 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[mazex][j] = 1
                                                         sqmaze[mazex][j] = 2
+                                                        mypath.append([mazex,j])
                                                         display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -359,15 +361,15 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazex > 0:
                                                             if sqmaze[mazex-1][j] == 1:
-                                                                mazey_last = j
+                                                                mypath.append([mazex,j])
                                                                 break
                                                         if mazex < 2 * rows:
                                                             if sqmaze[mazex+1][j] == 1:
-                                                                mazey_last = j
+                                                                mypath.append([mazex,j])
                                                                 break
                                         else: # the y coordinate is the same, check the x direction
-                                            cds = numpy.sign(mazex-mazex_last)   # determines the direction of click
-                                            for i in range(mazex_last + cds, mazex, cds):
+                                            cds = numpy.sign(mazex-mypath[-1][0])   # determines the direction of click
+                                            for i in range(mypath[-1][0] + cds, mazex, cds):
                                                 match sqmaze[i][mazey]:
                                                     case 0: # the next tile is wall, stop
                                                         break
@@ -377,6 +379,7 @@ def main():
                                                             globals.timer_r = 1
                                                         pathmaze[i][mazey] = 1
                                                         sqmaze[i][mazey] = 2
+                                                        mypath.append([i,mazey])                                                        
                                                         display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -410,11 +413,11 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazey > 0:
                                                             if sqmaze[i][mazey - 1] == 1:
-                                                                mazex_last = i
+                                                                mypath.append([i,mazey])                                                                
                                                                 break
                                                         if mazey < 2 * cols:
                                                             if sqmaze[i][mazey + 1] == 1:
-                                                                mazex_last = i
+                                                                mypath.append([i,mazey])                                                                
                                                                 break
             
             elif pygame.mouse.get_pressed()[2] == True:
@@ -434,6 +437,7 @@ def main():
                                     pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
                                 pathmaze[mazex][mazey] = 0
                                 sqmaze[mazex][mazey] = 1
+                                del mypath[-1]
                                 display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze)
 
 #                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -469,8 +473,8 @@ def main():
                 if button.counter == 1:
                     globals.timer_r = 0
                     reset(rows, cols, sqmaze, pathmaze, startpos)
-                    mazex_last = 1
-                    mazey_last = startpos
+                    mypath.clear()
+                    mypath.append([1,startpos])                    
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                     pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                     button.counter = 0
@@ -519,8 +523,8 @@ def main():
                 if button.counter == 1:
                     globals.timer_r = 0
                     sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
-                    mazex_last = 1
-                    mazey_last = startpos
+                    mypath.clear()
+                    mypath.append([1,startpos])                    
                     globals.path_nmbr = 0
                     for i in range(rows * 2 + 1):
                         for j in range(cols * 2 + 1):
