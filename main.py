@@ -317,7 +317,7 @@ def main():
                                     if not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
                                         if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
                                             cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
-                                            for j in range(mypath[-1][1] + cds, mazey, cds):
+                                            for j in range(mypath[-1][1] + cds, mazey + cds, cds):
                                                 match sqmaze[mazex][j]:
                                                     case 0: # the next tile is wall, stop
                                                         break
@@ -361,15 +361,13 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazex > 0:
                                                             if sqmaze[mazex-1][j] == 1:
-                                                                mypath.append([mazex,j])
                                                                 break
                                                         if mazex < 2 * rows:
                                                             if sqmaze[mazex+1][j] == 1:
-                                                                mypath.append([mazex,j])
                                                                 break
                                         else: # the y coordinate is the same, check the x direction
                                             cds = numpy.sign(mazex-mypath[-1][0])   # determines the direction of click
-                                            for i in range(mypath[-1][0] + cds, mazex, cds):
+                                            for i in range(mypath[-1][0] + cds, mazex + cds, cds):
                                                 match sqmaze[i][mazey]:
                                                     case 0: # the next tile is wall, stop
                                                         break
@@ -413,11 +411,9 @@ def main():
                                                         # check if we reached a crossing
                                                         if mazey > 0:
                                                             if sqmaze[i][mazey - 1] == 1:
-                                                                mypath.append([i,mazey])                                                                
                                                                 break
                                                         if mazey < 2 * cols:
                                                             if sqmaze[i][mazey + 1] == 1:
-                                                                mypath.append([i,mazey])                                                                
                                                                 break
             
             elif pygame.mouse.get_pressed()[2] == True:
@@ -439,7 +435,9 @@ def main():
                                 sqmaze[mazex][mazey] = 1
                                 del mypath[-1]
                                 display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze)
-
+                                pygame.display.flip()
+                                print('a')
+                                
 #                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
             for button in buttons:
