@@ -5,19 +5,13 @@ import globals
 import decimal
 import display
 
-def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols):
+def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
 #        return (abs(node[0] - end[0]))^2 + (abs(node[1] - end[1]))^2
 
-    # Find start and end points
-    for i in range(len(sqmaze)):
-        for j in range(len(sqmaze[0])):
-            if sqmaze[i][j] == 3:
-                start = (i, j)
-            elif sqmaze[i][j] == 4:
-                end = (i, j)
+    start = (startpoint[0], startpoint[1])
 
     # Initialize the data structures
     visited = set()
@@ -75,18 +69,12 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Goal was not found
     return None
 
-def astar(sqmaze, offset_x, offset_y, zoom, rows, cols):
+def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
     
-    # Find start and end points
-    for i in range(len(sqmaze)):
-        for j in range(len(sqmaze[0])):
-            if sqmaze[i][j] == 3:
-                start = (i, j)
-            elif sqmaze[i][j] == 4:
-                end = (i, j)
+    start = (startpoint[0], startpoint[1])
 
     # Initialize the data structures
     visited = set()
@@ -154,14 +142,8 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols):
     return None
 
 
-def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
-    # Find start and end points
-    for i in range(len(sqmaze)):
-        for j in range(len(sqmaze[0])):
-            if sqmaze[i][j] == 3:
-                start = (i, j)
-            elif sqmaze[i][j] == 4:
-                end = (i, j)
+def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
+    start = (startpoint[0], startpoint[1])
 
     # Initialize the data structures
     visited = set()
@@ -220,14 +202,9 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
     return None
 
 
-def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
-    # Find start and end points
-    for i in range(len(sqmaze)):
-        for j in range(len(sqmaze[0])):
-            if sqmaze[i][j] == 3:
-                start = (i, j)
-            elif sqmaze[i][j] == 4:
-                end = (i, j)
+def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
+    start = (startpoint[0], startpoint[1])
+
     # Find the rows and columns of the maze
     rows = len(sqmaze)
     cols = len(sqmaze[0])
@@ -288,14 +265,8 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
 
 
 
-def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols):
-    # Find start and end points
-    for i in range(len(sqmaze)):
-        for j in range(len(sqmaze[0])):
-            if sqmaze[i][j] == 3:
-                start = (i, j)
-            elif sqmaze[i][j] == 4:
-                end = (i, j)
+def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
+    start = (startpoint[0], startpoint[1])
 
     # Initialize the data structures
     visited = set()

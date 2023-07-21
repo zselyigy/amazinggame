@@ -477,7 +477,7 @@ def main():
             if buttons[3].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
-                    reset(rows, cols, sqmaze, startpos, mypath)
+                    reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles)
                     mypath.append([1,startpos])
                     accessed_tiles.append([1,startpos])
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -504,15 +504,15 @@ def main():
                             globals.timer_r = 1
                         display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                         if solver == 0:
-                            solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols)
+                            solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
                         if solver == 1:
-                            solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols)
+                            solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
                         if solver == 2:
-                            solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols)
+                            solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
                         if solver == 3:
-                            solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols)
+                            solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
                         if solver == 4:
-                            solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols)
+                            solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
                         for so in solution:
                             sqmaze[so[0]][so[1]] = 5
                         sqmaze[1][startpos] = 3
