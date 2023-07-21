@@ -5,7 +5,7 @@ import globals
 import decimal
 import display
 
-def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
+def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
@@ -75,7 +75,7 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     # Goal was not found
     return None
 
-def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
+def astar(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Define the heuristic function
     def heuristic(node):
         return abs(node[0] - end[0]) + abs(node[1] - end[1])
@@ -154,7 +154,7 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     return None
 
 
-def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
+def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):
@@ -220,7 +220,7 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
     return None
 
 
-def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
+def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):
@@ -288,7 +288,7 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
 
 
 
-def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons):
+def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols):
     # Find start and end points
     for i in range(len(sqmaze)):
         for j in range(len(sqmaze[0])):

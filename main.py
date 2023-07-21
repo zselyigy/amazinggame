@@ -504,15 +504,15 @@ def main():
                             globals.timer_r = 1
                         display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                         if solver == 0:
-                            solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                            solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols)
                         if solver == 1:
-                            solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                            solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols)
                         if solver == 2:
-                            solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                            solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols)
                         if solver == 3:
-                            solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                            solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols)
                         if solver == 4:
-                            solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons)
+                            solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols)
                         for so in solution:
                             sqmaze[so[0]][so[1]] = 5
                         sqmaze[1][startpos] = 3
