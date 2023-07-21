@@ -107,8 +107,9 @@ def reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles):
             if sqmaze[i][j] == 6:
                 sqmaze[i][j] = 1
     mypath.clear()
-    accessed_tiles.cleat()
+    accessed_tiles.clear()
     mypath.append([1,startpos])
+    accessed_tiles.append([1,startpos])
 
 def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
@@ -121,6 +122,7 @@ def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
         if  sqmaze[1][startpos] == 1:
             sqmaze[1][startpos] = 3
             mypath.append([1,startpos])
+            accessed_tiles.append([1, startpos])
             something = False
 
     something = True
@@ -284,6 +286,11 @@ def main():
                                         globals.timer_r = 1
                                     sqmaze[mazex][mazey] = 2
                                     mypath.append([mazex,mazey])
+                                    try:
+                                        tileindex = accessed_tiles.index([mazex,mazey])
+                                    except ValueError:
+                                        accessed_tiles.append([mazex,mazey])
+                                    
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                     # check if the maze is solved
                                     if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
@@ -313,6 +320,10 @@ def main():
                                                             globals.timer_r = 1
                                                         sqmaze[mazex][j] = 2
                                                         mypath.append([mazex,j])
+                                                        try:
+                                                            tileindex = accessed_tiles.index([mazex,j])
+                                                        except ValueError:
+                                                            accessed_tiles.append([mazex,j])
                                                         display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -362,6 +373,10 @@ def main():
                                                             globals.timer_r = 1
                                                         sqmaze[i][mazey] = 2
                                                         mypath.append([i,mazey])                                                        
+                                                        try:
+                                                            tileindex = accessed_tiles.index([i,mazey])
+                                                        except ValueError:
+                                                            accessed_tiles.append([i,mazey])
                                                         display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -450,8 +465,8 @@ def main():
                 if button.counter == 1:
                     globals.timer_r = 0
                     reset(rows, cols, sqmaze, startpos, mypath)
-                    mypath.clear()
-                    mypath.append([1,startpos])                    
+                    mypath.append([1,startpos])
+                    accessed_tiles.append([1,startpos])
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                     pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                     button.counter = 0
@@ -469,7 +484,7 @@ def main():
             # solve the maze
             if buttons[5].clicked:
                     if button.counter == 1:
-                        reset(rows, cols, sqmaze, startpos, mypath)
+                        reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles)
                         globals.alg_sp = 0
                         if globals.timer_r == 0:
                             globals.start_t = time.time()
@@ -499,9 +514,9 @@ def main():
             if buttons[6].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
-                    sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath)
-                    mypath.clear()
-                    mypath.append([1,startpos])                    
+                    sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
+                    mypath.append([1,startpos])
+                    accessed_tiles.append([1,startpos])
                     globals.path_nmbr = 0
                     for i in range(rows * 2 + 1):
                         for j in range(cols * 2 + 1):
