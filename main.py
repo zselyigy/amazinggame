@@ -106,22 +106,18 @@ def reset(rows, cols, sqmaze, startpos, mypath):
                 sqmaze[i][j] = 1
             if sqmaze[i][j] == 6:
                 sqmaze[i][j] = 1
-#            pathmaze[i][j] = 0
-#    pathmaze[1][startpos] = 1
     mypath.clear()
     mypath.append([1,startpos])
 
 def generate_maze(rows, cols, seed, seed_enabled, mypath):
     maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
     sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
-#    pathmaze = numpy.zeros((2*rows+1, 2*cols+1))
     mypath.clear()
     something = True
     while something:
         startpos = random.randint(1, 2 * cols)
         if  sqmaze[1][startpos] == 1:
             sqmaze[1][startpos] = 3
-#            pathmaze[1][startpos] = 1
             mypath.append([1,startpos])
             something = False
 
@@ -131,7 +127,6 @@ def generate_maze(rows, cols, seed, seed_enabled, mypath):
         if  sqmaze[2 * rows - 1][endpos] == 1:
             sqmaze[2 * rows - 1][endpos] = 4
             something = False
-#    return sqmaze, pathmaze, startpos, endpos
     return sqmaze, startpos, endpos
 
 def main():
@@ -232,15 +227,12 @@ def main():
     offset_x = -1 * rows // 2
 
 # Generate maze
-#    sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
     mypath = []
     sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath)
     for i in range(rows * 2 + 1):
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
-    mypath.append([1,startpos])
-
 
 # setting up the start ingame screen 
     buttons = []
@@ -289,20 +281,10 @@ def main():
                     case "Click and drag":
                         if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
                             if sqmaze[mazex][mazey] == 1:    # the tile is empty. check if selectable or not
-                                if ((mypath[-1][0] == mazex - 1) and (mypath[-1][1] == mazey)) or ((mypath[-1][0] == mazex + 1) and (mypath[-1][1] == mazey)) or ((mypath[-1][1] == mazey - 1) and (mypath[-1][0] == mazex)) or ((mypath[-1][1] == mazey - 1) and (mypath[-1][0] == mazex)):
-                                # if (pathmaze[mazex - 1][mazey] + pathmaze[mazex + 1][mazey] + pathmaze[mazex][mazey - 1] + pathmaze[mazex][mazey + 1]) == 1:
-                                #     if pathmaze[mazex - 1][mazey] > 0:
-                                #         pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] + 1
-                                #     if pathmaze[mazex + 1][mazey] > 0:
-                                #         pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] + 1
-                                #     if pathmaze[mazex][mazey - 1] > 0:
-                                #         pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] + 1
-                                #     if pathmaze[mazex][mazey + 1] > 0:
-                                #         pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] + 1
+                                if (abs(mypath[-1][0] - mazex) + abs(mypath[-1][1] - mazey)) == 1:
                                     if globals.timer_r == 0:
                                         globals.start_t = time.time()
                                         globals.timer_r = 1
-#                                    pathmaze[mazex][mazey] = 1
                                     sqmaze[mazex][mazey] = 2
                                     mypath.append([mazex,mazey])
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -332,7 +314,6 @@ def main():
                                                         if globals.timer_r == 0:
                                                             globals.start_t = time.time()
                                                             globals.timer_r = 1
-#                                                        pathmaze[mazex][j] = 1
                                                         sqmaze[mazex][j] = 2
                                                         mypath.append([mazex,j])
                                                         display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
@@ -382,7 +363,6 @@ def main():
                                                         if globals.timer_r == 0:
                                                             globals.start_t = time.time()
                                                             globals.timer_r = 1
-#                                                        pathmaze[i][mazey] = 1
                                                         sqmaze[i][mazey] = 2
                                                         mypath.append([i,mazey])                                                        
                                                         display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze)
@@ -428,23 +408,11 @@ def main():
                     mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                     mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
                     if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                        if sqmaze[mazex][mazey] == 2:    # the tile is selected. check if unselectable or not
-                            if ((mypath[-1][0] == mazex - 1) and (mypath[-1][1] == mazey)) or ((mypath[-1][0] == mazex + 1) and (mypath[-1][1] == mazey)) or ((mypath[-1][1] == mazey - 1) and (mypath[-1][0] == mazex)) or ((mypath[-1][1] == mazey - 1) and (mypath[-1][0] == mazex)):
-                            # if pathmaze[mazex][mazey] == 1:
-                            #     if pathmaze[mazex - 1][mazey] > 0:
-                            #         pathmaze[mazex - 1][mazey] = pathmaze[mazex - 1][mazey] - 1
-                            #     if pathmaze[mazex + 1][mazey] > 0:
-                            #         pathmaze[mazex + 1][mazey] = pathmaze[mazex + 1][mazey] - 1
-                            #     if pathmaze[mazex][mazey - 1] > 0:
-                            #         pathmaze[mazex][mazey - 1] = pathmaze[mazex][mazey - 1] - 1
-                            #     if pathmaze[mazex][mazey + 1] > 0:
-                            #         pathmaze[mazex][mazey + 1] = pathmaze[mazex][mazey + 1] - 1
-                            #     pathmaze[mazex][mazey] = 0
+                        if (mypath[-1][0] == mazex) and (mypath[-1][1] == mazey):    # is this the last selected tile?
                                 sqmaze[mazex][mazey] = 1
                                 del mypath[-1]
                                 display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze)
                                 pygame.display.flip()
-                                print('a')
                                 
 #                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
 # screen button events                    
@@ -478,7 +446,6 @@ def main():
             if buttons[3].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
-#                    reset(rows, cols, sqmaze, pathmaze, startpos)
                     reset(rows, cols, sqmaze, startpos, mypath)
                     mypath.clear()
                     mypath.append([1,startpos])                    
@@ -499,7 +466,7 @@ def main():
             # solve the maze
             if buttons[5].clicked:
                     if button.counter == 1:
-                        reset(rows, cols, sqmaze, pathmaze, startpos, mypath)
+                        reset(rows, cols, sqmaze, startpos, mypath)
                         globals.alg_sp = 0
                         if globals.timer_r == 0:
                             globals.start_t = time.time()
@@ -529,7 +496,6 @@ def main():
             if buttons[6].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
-#                    sqmaze, pathmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled)
                     sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath)
                     mypath.clear()
                     mypath.append([1,startpos])                    
