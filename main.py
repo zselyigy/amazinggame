@@ -8,6 +8,7 @@ import solve
 import globals
 import time
 import math
+import decimal
 try:
     import cPickle as pickle
 except:
@@ -290,6 +291,10 @@ def main():
                                         tileindex = accessed_tiles.index([mazex,mazey])
                                     except ValueError:
                                         accessed_tiles.append([mazex,mazey])
+                                        globals.solved_text = len(accessed_tiles) / globals.path_nmbr
+                                        globals.c = decimal.Decimal(globals.solved_text)
+                                        globals.percentage =(round(globals.c, 4) * 100)
+                                        display.solved_display()
                                     
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
                                     # check if the maze is solved
@@ -324,6 +329,10 @@ def main():
                                                             tileindex = accessed_tiles.index([mazex,j])
                                                         except ValueError:
                                                             accessed_tiles.append([mazex,j])
+                                                            globals.solved_text = len(accessed_tiles) / globals.path_nmbr
+                                                            globals.c = decimal.Decimal(globals.solved_text)
+                                                            globals.percentage =(round(globals.c, 4) * 100)
+                                                            display.solved_display()
                                                         display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
@@ -377,6 +386,10 @@ def main():
                                                             tileindex = accessed_tiles.index([i,mazey])
                                                         except ValueError:
                                                             accessed_tiles.append([i,mazey])
+                                                            globals.solved_text = len(accessed_tiles) / globals.path_nmbr
+                                                            globals.c = decimal.Decimal(globals.solved_text)
+                                                            globals.percentage =(round(globals.c, 4) * 100)
+                                                            display.solved_display()
                                                         display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze)
                                                         pygame.display.flip()
                                                         # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, solver_text)
