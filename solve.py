@@ -45,7 +45,7 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -110,7 +110,7 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
-            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -176,7 +176,7 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -240,7 +240,7 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
 
@@ -300,7 +300,7 @@ def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
 
         if sqmaze[node[0]][node[1]] != 3:
             sqmaze[node[0]][node[1]] = 6
-            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze)
+            display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
 

@@ -477,9 +477,9 @@ def main():
             if buttons[3].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
+                    globals.time = 0.0
+                    globals.percentage = 0
                     reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles)
-                    mypath.append([1,startpos])
-                    accessed_tiles.append([1,startpos])
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                     pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                     button.counter = 0
