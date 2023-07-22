@@ -3,11 +3,11 @@ def global_init():
     global setup_screen_fontsize, setup_screen_font_color, setup_screen_bg_color, sc_x, sc_y, mc_x, mc_y, gamemode_solvethemaze, gamemode_timelimited, gamemode_speedrun, gamemode_text
     global kbmaction_text
     path = (255, 255, 255)
-    sel_path = (107, 216, 255)
-    start_c = (63, 192, 76)
-    end_c = (46, 100, 161)
-    fin_path = (255, 0, 0)
-    alg_s = (255, 150, 0)
+    sel_path = (107, 216, 255)   # selected path
+    start_c = (63, 192, 76)      # starting tile
+    end_c = (46, 100, 161)       # end tile
+    fin_path = (255, 0, 0)       # finished path
+    alg_s = (255, 150, 0)        # algorithm searched tiles
     centre_x, centre_y = 0, 0
     alg_sp = 0
     solved_text = ""

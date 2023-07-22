@@ -235,34 +235,39 @@ def start_screen(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer):
     # show the screen
     pygame.display.flip()
 
-def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols):
+def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
     for i in range(2*rows+1):
         for j in range(2*cols+1):
             color = (0, 0, 0)
             if sqmaze[i][j] == 1:
-                color = globals.path          
-            if sqmaze[i][j] == 2:
-                color = globals.sel_path
-            if sqmaze[i][j] == 3:
-                color = globals.start_c
-            if sqmaze[i][j] == 4:
-                color = globals.end_c
-            if sqmaze[i][j] == 5:
-                color = globals.fin_path
-            if sqmaze[i][j] == 6:
                 color = globals.alg_s
+                try:
+                    tileindex = accessed_tiles.index([i, j])
+                except ValueError:
+                    color = globals.path          
+            elif sqmaze[i][j] == 2:
+                color = globals.sel_path
+            elif sqmaze[i][j] == 3:
+                color = globals.start_c
+            elif sqmaze[i][j] == 4:
+                color = globals.end_c
+            elif sqmaze[i][j] == 5:
+                color = globals.fin_path
+            elif sqmaze[i][j] == 6:
+                color = globals.alg_s
+
             if color != (0, 0, 0):
                 pygame.draw.line(globals.screen, color,
                     (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
                     (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
                     zoom)
 
-def draw(sqmaze, offset_x, offset_y, zoom, rows, cols):
+def draw(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
     globals.screen.fill((0, 0, 0))
-    draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols)
+    draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles)
 
 
-def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text):
+def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles):
     ingame_button_height = 30
     buttons.append(Button('Zoom In', pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Zoom Out',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
@@ -273,10 +278,10 @@ def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update,
     buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(SelfScrollButton(['Click and drag','Click direction','Arrows'], pygame.display.Info().current_w-180, 8*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
     buttons.append(Button('Quit',pygame.display.Info().current_w-180, 9*(ingame_button_height + 10) + 90, 170, ingame_button_height))
-    refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text)
+    refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles)
 
-def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, solver_text):
-    draw(sqmaze, offset_x, offset_y, zoom, rows, cols)
+def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles):
+    draw(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles)
     for button in buttons:
         button.draw()
     textDisplay(globals.gamemode_text, 20, pygame.Rect(pygame.display.Info().current_w-180, 10, 170, 30), (0, 0, 0), (255, 255, 255))
@@ -288,20 +293,25 @@ def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons,
     elif update == 1:
         pygame.display.update()
 
-def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze):
+def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze, accessed_tiles):
     color = (0, 0, 0)
     if sqmaze[i][j] == 1:
-        color = globals.path          
-    if sqmaze[i][j] == 2:
-        color = globals.sel_path
-    if sqmaze[i][j] == 3:
-        color = globals.start_c
-    if sqmaze[i][j] == 4:
-        color = globals.end_c
-    if sqmaze[i][j] == 5:
-        color = globals.fin_path
-    if sqmaze[i][j] == 6:
         color = globals.alg_s
+        try:
+            tileindex = accessed_tiles.index([i, j])
+        except ValueError:
+            color = globals.path          
+    elif sqmaze[i][j] == 2:
+        color = globals.sel_path
+    elif sqmaze[i][j] == 3:
+        color = globals.start_c
+    elif sqmaze[i][j] == 4:
+        color = globals.end_c
+    elif sqmaze[i][j] == 5:
+        color = globals.fin_path
+    elif sqmaze[i][j] == 6:
+        color = globals.alg_s
+
     if color != (0, 0, 0):
             pygame.draw.line(globals.screen, color,
                 (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
