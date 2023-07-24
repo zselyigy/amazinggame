@@ -272,6 +272,51 @@ def main():
                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                     zoom = max(1, zoom - 1)
                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    if event.key == pygame.K_LEFT:
+                        xdir = -1
+                        ydir = 0
+                    if event.key == pygame.K_RIGHT:
+                        xdir = +1
+                        ydir = 0
+                    if event.key == pygame.K_UP:
+                        xdir = 0
+                        ydir = -1
+                    if event.key == pygame.K_DOWN:
+                        xdir = 0
+                        ydir = 1
+                    mazex = mypath[-1][0] + xdir
+                    mazey = mypath[-1][1] + ydir
+                    if sqmaze[mazex][mazey] == 1: # the tile the arrow showed is empty
+                        if globals.timer_r == 0:
+                            globals.start_t = time.time()
+                            globals.timer_r = 1
+                        sqmaze[mazex][mazey] = 2
+                        mypath.append([mazex,mazey])
+                        try:
+                            tileindex = accessed_tiles.index([mazex,mazey])
+                        except ValueError:
+                            accessed_tiles.append([mazex,mazey])
+                            globals.solved_text = len(accessed_tiles) / globals.path_nmbr
+                            globals.c = decimal.Decimal(globals.solved_text)
+                            globals.percentage =(round(globals.c, 4) * 100)
+                            display.solved_display()
+                        
+                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                        # check if the maze is solved
+                        if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                            for i in range(2*rows+1):
+                                for j in range(2*cols+1):
+                                    if sqmaze[i][j] == 2:
+                                        sqmaze[i][j] = 5
+                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                            display.display_endgame()
+
+                            MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                            MyPlayer.save()
+                            globals.timer_r = 0
+                            pygame.display.flip()
+
             elif pygame.mouse.get_pressed()[0] == True:
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
@@ -427,6 +472,7 @@ def main():
                                                         if mazey < 2 * cols:
                                                             if sqmaze[i][mazey + 1] == 1:
                                                                 break
+
             
             elif pygame.mouse.get_pressed()[2] == True:
                 if globals.kbmaction_text == "Click and drag" or globals.kbmaction_text == "Click direction":
