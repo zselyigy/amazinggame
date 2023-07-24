@@ -316,6 +316,11 @@ def main():
                             MyPlayer.save()
                             globals.timer_r = 0
                             pygame.display.flip()
+                    elif sqmaze[mazex][mazey] == 2: # the tile the arrow showed in the selected path
+                        sqmaze[mypath[-1][0]][mypath[-1][1]] = 1
+                        display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][0], mypath[-1][1], sqmaze, accessed_tiles)
+                        del mypath[-1]
+                        pygame.display.flip()
 
             elif pygame.mouse.get_pressed()[0] == True:
                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
@@ -484,6 +489,7 @@ def main():
                                 del mypath[-1]
                                 display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze, accessed_tiles)
                                 pygame.display.flip()
+
             if event.type == pygame.MOUSEMOTION:
                 display.textDisplay(str(mypath[-1][0]), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                 display.textDisplay(str(mypath[-1][1]), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 10*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
