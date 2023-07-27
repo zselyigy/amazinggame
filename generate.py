@@ -13,6 +13,7 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
         print(seed)
 
 
+
     grid = []
     for i in range(rows):
         row = []
@@ -41,7 +42,7 @@ def generate_maze_kruskal(rows, cols,seed, seed_enabled):
             set1.update(set2)
             for cell in set2:
                 sets[cell] = set1
-    return maze
+    return maze, seed
 
 
 

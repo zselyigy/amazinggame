@@ -25,6 +25,7 @@ class gameConfig():
             self.last_rows = 10
             self.last_cols = 5
             self.last_gamemode = globals.gamemode_solvethemaze
+            self.last_seeddict = {}
 
     def save(self):
         file = open('game.cfg','wb')
@@ -113,7 +114,7 @@ def reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles):
     accessed_tiles.append([1,startpos])
 
 def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
-    maze = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
+    maze, seed = generate.generate_maze_kruskal(rows, cols, seed, seed_enabled)
     sqmaze = generate.transform_display(rows, cols, maze, seed, seed_enabled)
     mypath.clear()
     accessed_tiles.clear()
@@ -132,7 +133,7 @@ def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
         if  sqmaze[2 * rows - 1][endpos] == 1:
             sqmaze[2 * rows - 1][endpos] = 4
             something = False
-    return sqmaze, startpos, endpos
+    return sqmaze, startpos, endpos, seed
 
 def main():
     globals.global_init()
@@ -145,6 +146,8 @@ def main():
 # Define variables needed
     rows = MyConfig.last_rows
     cols = MyConfig.last_cols
+    seeddict = MyConfig.last_seeddict
+    sc = 0
     globals.gamemode_text = MyConfig.last_gamemode
     seed_enabled = False
     seed = 1683387020
@@ -152,6 +155,7 @@ def main():
     solver_text = 'GBFS'
     globals.timer_r = 0
     MyPlayer = Player(MyConfig.last_player)
+
 # Use this to set full screen
 #     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 #    window_width=800
@@ -174,6 +178,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+            
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_x:
+                    seeddict = {}
+                    sc = 0
 # game starts clicking the start button
 # screen button events                    
             for button in startscreen_buttons:
@@ -190,7 +199,7 @@ def main():
             for inputbox in startscreen_inputs:
                 inputbox.handle_event(event)
 
-# quit if quit button clicked
+# quit if quit button clickedcols
     if startgame_quit:
         pygame.quit()
 
@@ -234,12 +243,21 @@ def main():
 # Generate maze
     mypath = []
     accessed_tiles = []
-    sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
+    sqmaze, startpos, endpos, seed = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
     for i in range(rows * 2 + 1):
         for j in range(cols * 2 + 1):
             if sqmaze[i][j] == 1:
                 globals.path_nmbr = globals.path_nmbr + 1
-
+    try:
+        keysList = list(seeddict[(str(rows)+"X"+str(cols))].keys())
+        sc = len(keysList)
+        seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+    except KeyError:
+            sc = 0
+            seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+    MyConfig.last_seeddict = seeddict
+    MyConfig.save()
+    print(seeddict)
 # setting up the start ingame screen 
     buttons = []
 # Setup and draw the ingame screen
@@ -251,12 +269,18 @@ def main():
         display.display_timer()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                MyConfig.last_sc = sc
+                MyConfig.last_seeddict = seeddict 
+                MyConfig.save()
                 running = False
 # keydown events
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     offset_x -= 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                elif event.key == pygame.K_x:
+                    seeddict = {}
+                    sc = 0
                 elif event.key == pygame.K_d:
                     offset_x += 1
                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
@@ -389,17 +413,17 @@ def main():
                                                         # check if the maze is solved
                                                         masolved = False
                                                         if mazex > 0:
-                                                           if sqmaze[mazex - 1][j] == 4:
-                                                               masolved = True
+                                                            if sqmaze[mazex - 1][j] == 4:
+                                                                masolved = True
                                                         if mazex < 2*rows + 1:
-                                                           if sqmaze[mazex + 1][j] == 4:
-                                                               masolved = True
+                                                            if sqmaze[mazex + 1][j] == 4:
+                                                                masolved = True
                                                         if j > 0:
-                                                           if sqmaze[mazex][j - 1] == 4:
-                                                               masolved = True
+                                                            if sqmaze[mazex][j - 1] == 4:
+                                                                masolved = True
                                                         if j < 2*cols + 1:
-                                                           if sqmaze[mazex][j + 1] == 4:
-                                                               masolved = True
+                                                            if sqmaze[mazex][j + 1] == 4:
+                                                                masolved = True
 
                                                         if masolved:
                                                             for i in range(2*rows+1):
@@ -446,17 +470,17 @@ def main():
                                                         # check if the maze is solved
                                                         masolved = False
                                                         if i > 0:
-                                                           if sqmaze[i - 1][mazey] == 4:
-                                                               masolved = True
+                                                            if sqmaze[i - 1][mazey] == 4:
+                                                                masolved = True
                                                         if i < 2*rows + 1:
-                                                           if sqmaze[i + 1][mazey] == 4:
-                                                               masolved = True
+                                                            if sqmaze[i + 1][mazey] == 4:
+                                                                masolved = True
                                                         if mazey > 0:
-                                                           if sqmaze[i][mazey - 1] == 4:
-                                                               masolved = True
+                                                            if sqmaze[i][mazey - 1] == 4:
+                                                                masolved = True
                                                         if mazey < 2*cols + 1:
-                                                           if sqmaze[i][mazey + 1] == 4:
-                                                               masolved = True
+                                                            if sqmaze[i][mazey + 1] == 4:
+                                                                masolved = True
 
                                                         if masolved:
                                                             for i in range(2*rows+1):
@@ -579,7 +603,17 @@ def main():
             if buttons[6].clicked:
                 if button.counter == 1:
                     globals.timer_r = 0
-                    sqmaze, startpos, endpos = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
+                    sqmaze, startpos, endpos, seed = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
+                    try:
+                        keysList = list(seeddict[(str(rows)+"X"+str(cols))].keys())
+                        sc = len(keysList)
+                        seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+                    except KeyError:
+                        sc = 0
+                        seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+                    MyConfig.last_seeddict = seeddict
+                    MyConfig.save()
+                    print(seeddict)
                     mypath.append([1,startpos])
                     accessed_tiles.append([1,startpos])
                     globals.path_nmbr = 0
@@ -597,6 +631,8 @@ def main():
 
             # quit
             if buttons[8].clicked:
+                MyConfig.last_seeddict = seeddict 
+                MyConfig.save()
                 running = False
 
 
