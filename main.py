@@ -135,37 +135,7 @@ def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
             something = False
     return sqmaze, startpos, endpos, seed
 
-def main():
-    globals.global_init()
-# Initialize pygame
-    pygame.init()
-    pygame.display.set_caption('The Wonder of Mazes')
-
-    MyConfig = gameConfig()
-
-# Define variables needed
-    rows = MyConfig.last_rows
-    cols = MyConfig.last_cols
-    seeddict = MyConfig.last_seeddict
-    sc = 0
-    globals.gamemode_text = MyConfig.last_gamemode
-    seed_enabled = False
-    seed = 1683387020
-    solver = 0
-    solver_text = 'GBFS'
-    globals.timer_r = 0
-    MyPlayer = Player(MyConfig.last_player)
-
-# Use this to set full screen
-# full screen
-    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-# in window
-#    screen = pygame.display.set_mode((800, 800))
-    globals.screen = screen
-# setting up the start screen
-# arrays for the main components 
-    startscreen_buttons = []    # buttons
-    startscreen_inputs = []     # input fields
+def starts_screen_loop(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer, seeddict, sc):
     display.start_screen(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer)
 
     globals.timer_r = 0
@@ -202,6 +172,41 @@ def main():
 # quit if quit button clickedcols
     if startgame_quit:
         pygame.quit()
+
+
+def main():
+    globals.global_init()
+# Initialize pygame
+    pygame.init()
+    pygame.display.set_caption('The Wonder of Mazes')
+
+    MyConfig = gameConfig()
+
+# Define variables needed
+    rows = MyConfig.last_rows
+    cols = MyConfig.last_cols
+    seeddict = MyConfig.last_seeddict
+    sc = 0
+    globals.gamemode_text = MyConfig.last_gamemode
+    seed_enabled = False
+    seed = 1683387020
+    solver = 0
+    solver_text = 'GBFS'
+    globals.timer_r = 0
+    MyPlayer = Player(MyConfig.last_player)
+
+# Use this to set full screen
+# full screen
+    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+# in window
+#    screen = pygame.display.set_mode((800, 800))
+    globals.screen = screen
+# setting up the start screen
+# arrays for the main components 
+    startscreen_buttons = []    # buttons
+    startscreen_inputs = []     # input fields
+
+    starts_screen_loop(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer, seeddict, sc)
 
     rows=int(startscreen_inputs[0].text)
     cols=int(startscreen_inputs[1].text)
@@ -629,12 +634,18 @@ def main():
             if buttons[7].clicked:
                 globals.kbmaction_text = buttons[7].text
 
-            # quit
+            # quit to main menu
             if buttons[8].clicked:
+                temp = rows
+                rows = cols
+                cols = temp
+                starts_screen_loop(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer, seeddict, sc)
+
+            # quit
+            if buttons[9].clicked:
                 MyConfig.last_seeddict = seeddict 
                 MyConfig.save()
                 running = False
-
 
 pygame.quit()
 

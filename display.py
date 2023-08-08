@@ -212,6 +212,8 @@ def display_timer():
     pygame.display.update(update_rect) 
 
 def start_screen(startscreen_buttons, startscreen_inputs, rows, cols, MyPlayer):
+    # clear the screen
+    globals.screen.fill((0,0,0))
     # startescreen buttons
     startscreen_buttons.append(Button('Start game', (pygame.display.Info().current_w-100)/2, (pygame.display.Info().current_h-30)/2, 100, 30))
     startscreen_buttons.append(Button('Quit', (pygame.display.Info().current_w-100)/2, (pygame.display.Info().current_h-30)/2 + 40, 100, 30))    
@@ -277,7 +279,8 @@ def ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update,
     buttons.append(Button('Solve',pygame.display.Info().current_w-180, 6*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 7*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     buttons.append(SelfScrollButton(['Click and drag','Click direction','Arrows'], pygame.display.Info().current_w-180, 8*(ingame_button_height + 10) + 90, 170, ingame_button_height))   
-    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 9*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit to main menu',pygame.display.Info().current_w-180, 9*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 10*(ingame_button_height + 10) + 90, 170, ingame_button_height))
     refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles)
 
 def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles):
