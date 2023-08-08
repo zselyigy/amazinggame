@@ -157,10 +157,10 @@ def main():
     MyPlayer = Player(MyConfig.last_player)
 
 # Use this to set full screen
-#     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
-#    window_width=800
-#    window_height=800
-    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+# full screen
+     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+# in window
+#    screen = pygame.display.set_mode((800, 800))
     globals.screen = screen
 # setting up the start screen
 # arrays for the main components 
@@ -386,7 +386,7 @@ def main():
                                         pygame.display.flip()
                 elif (globals.kbmaction_text == "Click direction"):
                         if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                    if not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
+                                    if (mazex == mypath[-1][0] or mazey == mypath[-1][1]) and not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
                                         if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
                                             cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
                                             for j in range(mypath[-1][1] + cds, mazey + cds, cds):
