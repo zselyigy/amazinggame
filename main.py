@@ -158,7 +158,7 @@ def main():
 
 # Use this to set full screen
 # full screen
-     screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 # in window
 #    screen = pygame.display.set_mode((800, 800))
     globals.screen = screen
