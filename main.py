@@ -401,7 +401,8 @@ def main():
                                                     pygame.display.flip()
                             elif (globals.kbmaction_text == "Click direction"):
                                     if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                                if (mazex == mypath[-1][0] or mazey == mypath[-1][1]) and not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
+                                                if numpy.logical_xor(mazex == mypath[-1][0], mazey == mypath[-1][1]):
+#                                                if (mazex == mypath[-1][0] or mazey == mypath[-1][1]) and not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
                                                     if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
                                                         cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
                                                         for j in range(mypath[-1][1] + cds, mazey + cds, cds):
@@ -659,8 +660,8 @@ def main():
                             MyConfig.last_seeddict = seeddict 
                             MyConfig.save()
                             running = False
+                            pygame.quit()
 
-pygame.quit()
 
 if __name__ == "__main__":
     main()
