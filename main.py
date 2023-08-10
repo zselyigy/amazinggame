@@ -405,9 +405,13 @@ def main():
 #                                                if (mazex == mypath[-1][0] or mazey == mypath[-1][1]) and not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
                                                     if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
                                                         cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
+                                                        masolved = False
                                                         for j in range(mypath[-1][1] + cds, mazey + cds, cds):
                                                             match sqmaze[j][mazex]:
                                                                 case 0: # the next tile is wall, stop
+                                                                    break
+                                                                case 4: # the tile is the endtile
+                                                                    masolved = True
                                                                     break
                                                                 case 1: # the tile is empty, we can move
                                                                     if globals.timer_r == 0:
@@ -427,7 +431,6 @@ def main():
                                                                     pygame.display.flip()
                                                                     # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                                                     # check if the maze is solved
-                                                                    masolved = False
                                                                     if mazex > 0:
                                                                         if sqmaze[j][mazex - 1] == 4:
                                                                             masolved = True
@@ -441,25 +444,26 @@ def main():
                                                                         if sqmaze[j + 1][mazex] == 4:
                                                                             masolved = True
 
-                                                                    if masolved:
-                                                                        for i in range(2*rows+1):
-                                                                            for j in range(2*cols+1):
-                                                                                if sqmaze[i][j] == 2:
-                                                                                    sqmaze[i][j] = 5
-                                                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                                                        display.display_endgame()
+                                                            if masolved:
+                                                                for i in range(2*rows+1):
+                                                                    for j in range(2*cols+1):
+                                                                        if sqmaze[i][j] == 2:
+                                                                            sqmaze[i][j] = 5
+                                                                display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                                                                display.display_endgame()
 
-                                                                        MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
-                                                                        MyPlayer.save()
-                                                                        globals.timer_r = 0
-                                                                        pygame.display.flip()
-                                                                    # check if we reached a crossing
-                                                                    if mazex > 0:
-                                                                        if sqmaze[j][mazex-1] == 1:
-                                                                            break
-                                                                    if mazex < 2 * rows:
-                                                                        if sqmaze[j][mazex+1] == 1:
-                                                                            break
+                                                                MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                                                                MyPlayer.save()
+                                                                globals.timer_r = 0
+                                                                pygame.display.flip()
+                                                            # check if we reached a crossing
+                                                            if mazex > 0:
+                                                                if sqmaze[j][mazex-1] == 1:
+                                                                    break
+                                                            if mazex < 2 * rows:
+                                                                if sqmaze[j][mazex+1] == 1:
+                                                                    break
+
                                                     else: # the y coordinate is the same, check the x direction
                                                         cds = numpy.sign(mazex-mypath[-1][0])   # determines the direction of click
                                                         for i in range(mypath[-1][0] + cds, mazex + cds, cds):
