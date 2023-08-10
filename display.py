@@ -244,7 +244,7 @@ def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
             if sqmaze[i][j] == 1:
                 color = globals.alg_s
                 try:
-                    tileindex = accessed_tiles.index([i, j])
+                    tileindex = accessed_tiles.index([j, i])
                 except ValueError:
                     color = globals.path          
             elif sqmaze[i][j] == 2:
@@ -301,7 +301,7 @@ def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze, accessed_tiles):
     if sqmaze[i][j] == 1:
         color = globals.alg_s
         try:
-            tileindex = accessed_tiles.index([i, j])
+            tileindex = accessed_tiles.index([j, i])
         except ValueError:
             color = globals.path          
     elif sqmaze[i][j] == 2:

@@ -161,9 +161,9 @@ def main():
 
 # Use this to set full screen
 # full screen
-    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+#    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 # in window
-#    screen = pygame.display.set_mode((800, 800))
+    screen = pygame.display.set_mode((800, 800))
     globals.screen = screen
 # arrays for the main components 
     startscreen_buttons = []    # buttons
@@ -357,7 +357,7 @@ def main():
                                         pygame.display.flip()
                                 elif sqmaze[mazey][mazex] == 2: # the tile the arrow showed in the selected path
                                     sqmaze[mypath[-1][1]][mypath[-1][0]] = 1
-                                    display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][0], mypath[-1][1], sqmaze, accessed_tiles)
+                                    display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][1], mypath[-1][0], sqmaze, accessed_tiles)
                                     del mypath[-1]
                                     pygame.display.flip()
 
@@ -423,7 +423,7 @@ def main():
                                                                         globals.c = decimal.Decimal(globals.solved_text)
                                                                         globals.percentage =(round(globals.c, 4) * 100)
                                                                         display.solved_display()
-                                                                    display.display_mazecell(offset_x, offset_y, zoom, mazex, j, sqmaze, accessed_tiles)
+                                                                    display.display_mazecell(offset_x, offset_y, zoom, j, mazex, sqmaze, accessed_tiles)
                                                                     pygame.display.flip()
                                                                     # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                                                     # check if the maze is solved
@@ -480,7 +480,7 @@ def main():
                                                                         globals.c = decimal.Decimal(globals.solved_text)
                                                                         globals.percentage =(round(globals.c, 4) * 100)
                                                                         display.solved_display()
-                                                                    display.display_mazecell(offset_x, offset_y, zoom, i, mazey, sqmaze, accessed_tiles)
+                                                                    display.display_mazecell(offset_x, offset_y, zoom, mazey, i, sqmaze, accessed_tiles)
                                                                     pygame.display.flip()
                                                                     # display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                                                     # check if the maze is solved
@@ -527,7 +527,7 @@ def main():
                                     if (mypath[-1][0] == mazex) and (mypath[-1][1] == mazey):    # is this the last selected tile?
                                             sqmaze[mazey][mazex] = 1
                                             del mypath[-1]
-                                            display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze, accessed_tiles)
+                                            display.display_mazecell(offset_x, offset_y, zoom, mazey, mazex,  sqmaze, accessed_tiles)
                                             pygame.display.flip()
 
                         if event.type == pygame.MOUSEMOTION:
