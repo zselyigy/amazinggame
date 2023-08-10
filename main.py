@@ -120,18 +120,18 @@ def generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles):
     accessed_tiles.clear()
     something = True
     while something:
-        startpos = random.randint(1, 2 * cols)
-        if  sqmaze[1][startpos] == 1:
-            sqmaze[1][startpos] = 3
+        startpos = random.randint(1, 2 * rows)
+        if  sqmaze[startpos][1] == 1:
+            sqmaze[startpos][1] = 3
             mypath.append([1,startpos])
             accessed_tiles.append([1, startpos])
             something = False
 
     something = True
     while something:
-        endpos = random.randint(1, 2 * cols)
-        if  sqmaze[2 * rows - 1][endpos] == 1:
-            sqmaze[2 * rows - 1][endpos] = 4
+        endpos = random.randint(1, 2 * rows)
+        if  sqmaze[endpos][2 * cols - 1] == 1:
+            sqmaze[endpos][2 * cols - 1] = 4
             something = False
     return sqmaze, startpos, endpos, seed
 
@@ -246,14 +246,14 @@ def main():
                 globals.sc_x = pygame.display.Info().current_w // 2
                 globals.sc_y = pygame.display.Info().current_h // 2
 
-                temp = rows
-                rows = cols
-                cols = temp
+                # temp = rows
+                # rows = cols
+                # cols = temp
 
-                globals.mc_y = cols / 2
-                globals.mc_x = rows / 2
-                offset_y = -1 * cols // 2
-                offset_x = -1 * rows // 2
+                globals.mc_y = rows / 2
+                globals.mc_x = cols / 2
+                offset_y = -1 * rows // 2
+                offset_x = -1 * cols // 2
 
             # Generate maze
                 mypath = []
@@ -326,11 +326,11 @@ def main():
                                     ydir = 1
                                 mazex = mypath[-1][0] + xdir
                                 mazey = mypath[-1][1] + ydir
-                                if sqmaze[mazex][mazey] == 1: # the tile the arrow showed is empty
+                                if sqmaze[mazey][mazex] == 1: # the tile the arrow showed is empty
                                     if globals.timer_r == 0:
                                         globals.start_t = time.time()
                                         globals.timer_r = 1
-                                    sqmaze[mazex][mazey] = 2
+                                    sqmaze[mazey][mazex] = 2
                                     mypath.append([mazex,mazey])
                                     try:
                                         tileindex = accessed_tiles.index([mazex,mazey])
@@ -343,7 +343,7 @@ def main():
                                     
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                     # check if the maze is solved
-                                    if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                    if sqmaze[mazey - 1][mazex] == 4 or sqmaze[mazey + 1][mazex] == 4 or sqmaze[mazey][mazex - 1] == 4 or sqmaze[mazey][mazex + 1] == 4:
                                         for i in range(2*rows+1):
                                             for j in range(2*cols+1):
                                                 if sqmaze[i][j] == 2:
@@ -355,8 +355,8 @@ def main():
                                         MyPlayer.save()
                                         globals.timer_r = 0
                                         pygame.display.flip()
-                                elif sqmaze[mazex][mazey] == 2: # the tile the arrow showed in the selected path
-                                    sqmaze[mypath[-1][0]][mypath[-1][1]] = 1
+                                elif sqmaze[mazey][mazex] == 2: # the tile the arrow showed in the selected path
+                                    sqmaze[mypath[-1][1]][mypath[-1][0]] = 1
                                     display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][0], mypath[-1][1], sqmaze, accessed_tiles)
                                     del mypath[-1]
                                     pygame.display.flip()
@@ -368,13 +368,13 @@ def main():
                             display.textDisplay(str(math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*7, 12*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                             display.textDisplay(str(math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)), 20, pygame.Rect(pygame.display.Info().current_w-globals.setup_screen_fontsize*4, 12*(globals.setup_screen_fontsize+20)+20 , globals.setup_screen_fontsize*5-20, globals.setup_screen_fontsize+10), globals.setup_screen_bg_color, globals.setup_screen_font_color)
                             if (globals.kbmaction_text == "Click and drag"):
-                                    if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                        if sqmaze[mazex][mazey] == 1:    # the tile is empty. check if selectable or not
+                                    if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
+                                        if sqmaze[mazey][mazex] == 1:    # the tile is empty. check if selectable or not
                                             if (abs(mypath[-1][0] - mazex) + abs(mypath[-1][1] - mazey)) == 1:
                                                 if globals.timer_r == 0:
                                                     globals.start_t = time.time()
                                                     globals.timer_r = 1
-                                                sqmaze[mazex][mazey] = 2
+                                                sqmaze[mazey][mazex] = 2
                                                 mypath.append([mazex,mazey])
                                                 try:
                                                     tileindex = accessed_tiles.index([mazex,mazey])
@@ -387,7 +387,7 @@ def main():
                                                 
                                                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                                 # check if the maze is solved
-                                                if sqmaze[mazex - 1][mazey] == 4 or sqmaze[mazex + 1][mazey] == 4 or sqmaze[mazex][mazey - 1] == 4 or sqmaze[mazex][mazey + 1] == 4:
+                                                if sqmaze[mazey - 1][mazex] == 4 or sqmaze[mazey + 1][mazex] == 4 or sqmaze[mazey][mazex - 1] == 4 or sqmaze[mazey][mazex + 1] == 4:
                                                     for i in range(2*rows+1):
                                                         for j in range(2*cols+1):
                                                             if sqmaze[i][j] == 2:
@@ -400,20 +400,20 @@ def main():
                                                     globals.timer_r = 0
                                                     pygame.display.flip()
                             elif (globals.kbmaction_text == "Click direction"):
-                                    if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
-                                                if numpy.logical_xor(mazex == mypath[-1][0], mazey == mypath[-1][1]):
+                                    if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
+                                                if numpy.logical_xor(mazex == mypath[-1][1], mazey == mypath[-1][0]):
 #                                                if (mazex == mypath[-1][0] or mazey == mypath[-1][1]) and not (mazex == mypath[-1][0] and mazey == mypath[-1][1]):
                                                     if mazex == mypath[-1][0]:   # the x coordinate is the same, check the y direction
                                                         cds = numpy.sign(mazey - mypath[-1][1])   # determines the direction of click
                                                         for j in range(mypath[-1][1] + cds, mazey + cds, cds):
-                                                            match sqmaze[mazex][j]:
+                                                            match sqmaze[j][mazex]:
                                                                 case 0: # the next tile is wall, stop
                                                                     break
                                                                 case 1: # the tile is empty, we can move
                                                                     if globals.timer_r == 0:
                                                                         globals.start_t = time.time()
                                                                         globals.timer_r = 1
-                                                                    sqmaze[mazex][j] = 2
+                                                                    sqmaze[j][mazex] = 2
                                                                     mypath.append([mazex,j])
                                                                     try:
                                                                         tileindex = accessed_tiles.index([mazex,j])
@@ -429,16 +429,16 @@ def main():
                                                                     # check if the maze is solved
                                                                     masolved = False
                                                                     if mazex > 0:
-                                                                        if sqmaze[mazex - 1][j] == 4:
+                                                                        if sqmaze[j][mazex - 1] == 4:
                                                                             masolved = True
                                                                     if mazex < 2*rows + 1:
-                                                                        if sqmaze[mazex + 1][j] == 4:
+                                                                        if sqmaze[j][mazex + 1] == 4:
                                                                             masolved = True
                                                                     if j > 0:
-                                                                        if sqmaze[mazex][j - 1] == 4:
+                                                                        if sqmaze[j - 1][mazex] == 4:
                                                                             masolved = True
                                                                     if j < 2*cols + 1:
-                                                                        if sqmaze[mazex][j + 1] == 4:
+                                                                        if sqmaze[j + 1][mazex] == 4:
                                                                             masolved = True
 
                                                                     if masolved:
@@ -455,22 +455,22 @@ def main():
                                                                         pygame.display.flip()
                                                                     # check if we reached a crossing
                                                                     if mazex > 0:
-                                                                        if sqmaze[mazex-1][j] == 1:
+                                                                        if sqmaze[j][mazex-1] == 1:
                                                                             break
                                                                     if mazex < 2 * rows:
-                                                                        if sqmaze[mazex+1][j] == 1:
+                                                                        if sqmaze[j][mazex+1] == 1:
                                                                             break
                                                     else: # the y coordinate is the same, check the x direction
                                                         cds = numpy.sign(mazex-mypath[-1][0])   # determines the direction of click
                                                         for i in range(mypath[-1][0] + cds, mazex + cds, cds):
-                                                            match sqmaze[i][mazey]:
+                                                            match sqmaze[mazey][i]:
                                                                 case 0: # the next tile is wall, stop
                                                                     break
                                                                 case 1: # the tile is empty, we can move
                                                                     if globals.timer_r == 0:
                                                                         globals.start_t = time.time()
                                                                         globals.timer_r = 1
-                                                                    sqmaze[i][mazey] = 2
+                                                                    sqmaze[mazey][i] = 2
                                                                     mypath.append([i,mazey])                                                        
                                                                     try:
                                                                         tileindex = accessed_tiles.index([i,mazey])
@@ -486,16 +486,16 @@ def main():
                                                                     # check if the maze is solved
                                                                     masolved = False
                                                                     if i > 0:
-                                                                        if sqmaze[i - 1][mazey] == 4:
+                                                                        if sqmaze[mazey][i - 1] == 4:
                                                                             masolved = True
                                                                     if i < 2*rows + 1:
-                                                                        if sqmaze[i + 1][mazey] == 4:
+                                                                        if sqmaze[mazey][i + 1] == 4:
                                                                             masolved = True
                                                                     if mazey > 0:
-                                                                        if sqmaze[i][mazey - 1] == 4:
+                                                                        if sqmaze[mazey - 1][i] == 4:
                                                                             masolved = True
                                                                     if mazey < 2*cols + 1:
-                                                                        if sqmaze[i][mazey + 1] == 4:
+                                                                        if sqmaze[mazey + 1][i] == 4:
                                                                             masolved = True
 
                                                                     if masolved:
@@ -512,10 +512,10 @@ def main():
                                                                         pygame.display.flip()
                                                                     # check if we reached a crossing
                                                                     if mazey > 0:
-                                                                        if sqmaze[i][mazey - 1] == 1:
+                                                                        if sqmaze[mazey - 1][i] == 1:
                                                                             break
                                                                     if mazey < 2 * cols:
-                                                                        if sqmaze[i][mazey + 1] == 1:
+                                                                        if sqmaze[mazey + 1][i] == 1:
                                                                             break
 
                         
@@ -523,9 +523,9 @@ def main():
                             if globals.kbmaction_text == "Click and drag" or globals.kbmaction_text == "Click direction":
                                 mazex = math.floor((event.pos[0] - globals.sc_x) / zoom + globals.mc_x - offset_x + 0.5)
                                 mazey = math.floor((event.pos[1] - globals.sc_y) / zoom + globals.mc_y - offset_y + 0.5)
-                                if mazex > -1 and mazex < 2 * rows + 1 and mazey > -1 and mazey < 2 * cols + 1:
+                                if mazex > -1 and mazex < 2 * cols + 1 and mazey > -1 and mazey < 2 * rows + 1:
                                     if (mypath[-1][0] == mazex) and (mypath[-1][1] == mazey):    # is this the last selected tile?
-                                            sqmaze[mazex][mazey] = 1
+                                            sqmaze[mazey][mazex] = 1
                                             del mypath[-1]
                                             display.display_mazecell(offset_x, offset_y, zoom, mazex, mazey, sqmaze, accessed_tiles)
                                             pygame.display.flip()
@@ -557,10 +557,10 @@ def main():
                         if buttons[2].clicked:
                             if button.counter == 1:
                                 zoom = zoom_init
-                                globals.mc_y = cols / 2
-                                globals.mc_x = rows / 2
-                                offset_y = -1 * cols // 2
-                                offset_x = -1 * rows // 2
+                                globals.mc_y = rows / 2
+                                globals.mc_x = cols / 2
+                                offset_y = -1 * rows // 2
+                                offset_x = -1 * cols // 2
                                 display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
                                 pygame.event.clear(pygame.MOUSEBUTTONDOWN)
                                 button.counter = 0
@@ -596,19 +596,19 @@ def main():
                                         globals.timer_r = 1
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                     if solver == 0:
-                                        solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
+                                        solution = solve.GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (endpos, 2 * cols - 1))
                                     if solver == 1:
-                                        solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
+                                        solution = solve.astar(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (endpos, 2 * cols - 1))
                                     if solver == 2:
-                                        solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
+                                        solution = solve.dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (endpos, 2 * cols - 1))
                                     if solver == 3:
-                                        solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
+                                        solution = solve.bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (endpos, 2 * cols - 1))
                                     if solver == 4:
-                                        solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (2 * rows - 1, endpos))
+                                        solution = solve.dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, mypath[-1], (endpos, 2 * cols - 1))
                                     for so in solution:
-                                        sqmaze[so[0]][so[1]] = 5
-                                    sqmaze[1][startpos] = 3
-                                    sqmaze[2 * rows - 1][endpos] = 4
+                                        sqmaze[so[1]][so[0]] = 5
+                                    sqmaze[startpos][1] = 3
+                                    sqmaze[endpos][2 * cols - 1] = 4
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
                                     globals.timer_r = 0
                                     display.display_endgame_solved()
@@ -647,9 +647,9 @@ def main():
 
                         # quit to main menu
                         if buttons[8].clicked:
-                            temp = rows
-                            rows = cols
-                            cols = temp
+                            # temp = rows
+                            # rows = cols
+                            # cols = temp
                             # let us switch to the ingame level
                             program_level = 'startscreen'
                             globals.screen.fill((0,0,0)) # clean the ingame screen

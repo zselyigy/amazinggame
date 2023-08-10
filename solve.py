@@ -42,8 +42,8 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         globals.c = decimal.Decimal(globals.solved_text)
         globals.percentage =(round(globals.c, 4) * 100)
 
-        if sqmaze[node[0]][node[1]] != 3:
-            sqmaze[node[0]][node[1]] = 6
+        if sqmaze[node[1]][node[0]] != 3:
+            sqmaze[node[1]][node[0]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
             display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
@@ -55,7 +55,7 @@ def GBFS(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
             if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
                 # Neighbor is out of bounds
                 continue
-            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+            if sqmaze[neighbor[1]][neighbor[0]] == 0:
                 # Neighbor is a wall
                 continue
             if neighbor in visited:
@@ -107,8 +107,8 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         globals.c = decimal.Decimal(globals.solved_text)
         globals.percentage =(round(globals.c, 4) * 100)
 
-        if sqmaze[node[0]][node[1]] != 3:
-            sqmaze[node[0]][node[1]] = 6
+        if sqmaze[node[1]][node[0]] != 3:
+            sqmaze[node[1]][node[0]] = 6
 #            main.display_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1)
             display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
@@ -119,7 +119,7 @@ def astar(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
             if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
                 # Neighbor is out of bounds
                 continue
-            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+            if sqmaze[neighbor[1]][neighbor[0]] == 0:
                 # Neighbor is a wall
                 continue
             if neighbor in visited:
@@ -174,8 +174,8 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         globals.c = decimal.Decimal(globals.solved_text)
         globals.percentage =(round(globals.c, 4) * 100)
 
-        if sqmaze[node[0]][node[1]] != 3:
-            sqmaze[node[0]][node[1]] = 6
+        if sqmaze[node[1]][node[0]] != 3:
+            sqmaze[node[1]][node[0]] = 6
             display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
@@ -185,7 +185,7 @@ def dfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
             if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
                 # Neighbor is out of bounds
                 continue
-            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+            if sqmaze[neighbor[1]][neighbor[0]] == 0:
                 # Neighbor is a wall
                 continue
             if neighbor in visited:
@@ -238,8 +238,8 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         globals.c = decimal.Decimal(globals.solved_text)
         globals.percentage =(round(globals.c, 4) * 100)
 
-        if sqmaze[node[0]][node[1]] != 3:
-            sqmaze[node[0]][node[1]] = 6
+        if sqmaze[node[1]][node[0]] != 3:
+            sqmaze[node[1]][node[0]] = 6
             display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
@@ -249,7 +249,7 @@ def bfs(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
             if neighbor[0] < 0 or neighbor[0] >= rows or neighbor[1] < 0 or neighbor[1] >= cols:
                 # Neighbor is out of bounds
                 continue
-            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+            if sqmaze[neighbor[1]][neighbor[0]] == 0:
                 # Neighbor is a wall
                 continue
             if neighbor in visited:
@@ -298,8 +298,8 @@ def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
         globals.c = decimal.Decimal(globals.solved_text)
         globals.percentage =(round(globals.c, 4) * 100)
 
-        if sqmaze[node[0]][node[1]] != 3:
-            sqmaze[node[0]][node[1]] = 6
+        if sqmaze[node[1]][node[0]] != 3:
+            sqmaze[node[1]][node[0]] = 6
             display.display_mazecell(offset_x, offset_y, zoom, node[0], node[1], sqmaze, visited)
             display.display_timer()
             time.sleep(1/((rows*cols)/2))
@@ -309,7 +309,7 @@ def dijkstra(sqmaze, offset_x, offset_y, zoom, rows, cols, startpoint, end):
             if neighbor[0] < 0 or neighbor[0] >= len(sqmaze) or neighbor[1] < 0 or neighbor[1] >= len(sqmaze[0]):
                 # Neighbor is out of bounds
                 continue
-            if sqmaze[neighbor[0]][neighbor[1]] == 0:
+            if sqmaze[neighbor[1]][neighbor[0]] == 0:
                 # Neighbor is a wall
                 continue
             if neighbor in visited:

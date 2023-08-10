@@ -260,8 +260,8 @@ def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
 
             if color != (0, 0, 0):
                 pygame.draw.line(globals.screen, color,
-                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
-                    (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
+                    (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y - 0.5)),
+                    (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y + 0.5)),
                     zoom)
 
 def draw(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
@@ -317,10 +317,10 @@ def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze, accessed_tiles):
 
     if color != (0, 0, 0):
             pygame.draw.line(globals.screen, color,
-                (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5)),
-                (globals.sc_x + zoom * (i - globals.mc_x + offset_x), globals.sc_y + zoom * (j - globals.mc_y + offset_y + 0.5)),
+                (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y - 0.5)),
+                (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y + 0.5)),
                 zoom)
 #    update_rect = [pygame.Rect((i+offset_x + globals.centre_x) *  zoom-(((zoom/3)+(zoom-1)/5)-1), (j+offset_y + globals.centre_y) * zoom, zoom+((zoom/3)+(zoom-1)/5), zoom), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
-    update_rect = [pygame.Rect(globals.sc_x + zoom * (i - globals.mc_x + offset_x - 0.5), globals.sc_y + zoom * (j - globals.mc_y + offset_y - 0.5), zoom + 1, zoom + 1), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
+    update_rect = [pygame.Rect(globals.sc_x + zoom * (j - globals.mc_x + offset_x - 0.5), globals.sc_y + zoom * (i - globals.mc_y + offset_y - 0.5), zoom + 1, zoom + 1), pygame.Rect(pygame.display.Info().current_w-180, 50, 170, 30)]
     solved_display()
     pygame.display.update(update_rect)  
