@@ -356,7 +356,7 @@ def main():
                                             MyPlayer.save()
                                             globals.timer_r = 0
                                             pygame.display.flip()
-                                    elif sqmaze[mazey][mazex] == 2: # the tile the arrow showed in the selected path
+                                    elif (sqmaze[mazey][mazex] == 2) or (sqmaze[mazey][mazex] == 3): # the tile the arrow showed in the selected path or the startpoint
                                         sqmaze[mypath[-1][1]][mypath[-1][0]] = 1
                                         display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][1], mypath[-1][0], sqmaze, accessed_tiles)
                                         del mypath[-1]
@@ -699,12 +699,6 @@ def main():
                                 elif event.key == pygame.K_s:
                                     offset_y += 1
                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
-                                elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
-                                    zoom += 1
-                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
-                                elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
-                                    zoom = max(1, zoom - 1)
-                                    display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
                                 elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                                     if event.key == pygame.K_LEFT:
                                         xdir = -1
@@ -749,7 +743,7 @@ def main():
                                             MyPlayer.save()
                                             globals.timer_r = 0
                                             pygame.display.flip()
-                                    elif sqmaze[mazey][mazex] == 2: # the tile the arrow showed in the selected path
+                                    elif (sqmaze[mazey][mazex] == 2) or (sqmaze[mazey][mazex] == 3): # the tile the arrow showed in the selected path or the startpoint
                                         sqmaze[mypath[-1][1]][mypath[-1][0]] = 1
                                         display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][1], mypath[-1][0], sqmaze, accessed_tiles)
                                         del mypath[-1]
