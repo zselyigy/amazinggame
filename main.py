@@ -668,7 +668,149 @@ def main():
                                 pygame.quit()
 
                 elif globals.gamemode_text == globals.gamemode_speedrun:
-                    return
+                # setting up the start ingame screen 
+                # Setup and draw the ingame screen
+                    display.ingame_screen_speedrun(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                #Handle pygame events
+                    running = True
+                    pygame.key.set_repeat(200, 50)
+                    while running:
+                        display.display_timer()
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                MyConfig.last_sc = sc
+                                MyConfig.last_seeddict = seeddict 
+                                MyConfig.save()
+                                running = False
+                # keydown events
+                            elif event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_a:
+                                    offset_x -= 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_x:
+                                    seeddict = {}
+                                    sc = 0
+                                elif event.key == pygame.K_d:
+                                    offset_x += 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_w:
+                                    offset_y -= 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_s:
+                                    offset_y += 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_PLUS or event.key == pygame.K_KP_PLUS:
+                                    zoom += 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
+                                    zoom = max(1, zoom - 1)
+                                    display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                elif event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                                    if event.key == pygame.K_LEFT:
+                                        xdir = -1
+                                        ydir = 0
+                                    if event.key == pygame.K_RIGHT:
+                                        xdir = +1
+                                        ydir = 0
+                                    if event.key == pygame.K_UP:
+                                        xdir = 0
+                                        ydir = -1
+                                    if event.key == pygame.K_DOWN:
+                                        xdir = 0
+                                        ydir = 1
+                                    mazex = mypath[-1][0] + xdir
+                                    mazey = mypath[-1][1] + ydir
+                                    if sqmaze[mazey][mazex] == 1: # the tile the arrow showed is empty
+                                        if globals.timer_r == 0:
+                                            globals.start_t = time.time()
+                                            globals.timer_r = 1
+                                        sqmaze[mazey][mazex] = 2
+                                        mypath.append([mazex,mazey])
+                                        try:
+                                            tileindex = accessed_tiles.index([mazex,mazey])
+                                        except ValueError:
+                                            accessed_tiles.append([mazex,mazey])
+                                            globals.solved_text = len(accessed_tiles) / globals.path_nmbr
+                                            globals.c = decimal.Decimal(globals.solved_text)
+                                            globals.percentage =(round(globals.c, 4) * 100)
+                                            display.solved_display()
+                                        
+                                        display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                                        # check if the maze is solved
+                                        if sqmaze[mazey - 1][mazex] == 4 or sqmaze[mazey + 1][mazex] == 4 or sqmaze[mazey][mazex - 1] == 4 or sqmaze[mazey][mazex + 1] == 4:
+                                            for i in range(2*rows+1):
+                                                for j in range(2*cols+1):
+                                                    if sqmaze[i][j] == 2:
+                                                        sqmaze[i][j] = 5
+                                            display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                                            display.display_endgame()
+
+                                            MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
+                                            MyPlayer.save()
+                                            globals.timer_r = 0
+                                            pygame.display.flip()
+                                    elif sqmaze[mazey][mazex] == 2: # the tile the arrow showed in the selected path
+                                        sqmaze[mypath[-1][1]][mypath[-1][0]] = 1
+                                        display.display_mazecell(offset_x, offset_y, zoom, mypath[-1][1], mypath[-1][0], sqmaze, accessed_tiles)
+                                        del mypath[-1]
+                                        pygame.display.flip()
+
+                # screen button events                    
+                            for button in buttons:
+                                button.handle_event(event)
+                            # restart maze solving
+                            if buttons[0].clicked:
+                                if button.counter == 1:
+                                    globals.timer_r = 0
+                                    globals.time = 0.0
+                                    globals.percentage = 0
+                                    reset(rows, cols, sqmaze, startpos, mypath, accessed_tiles)
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
+                                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                                    button.counter = 0
+
+                            # re-generate maze
+                            if buttons[1].clicked:
+                                if button.counter == 1:
+                                    globals.timer_r = 0
+                                    sqmaze, startpos, endpos, seed = generate_maze(rows, cols, seed, seed_enabled, mypath, accessed_tiles)
+                                    try:
+                                        keysList = list(seeddict[(str(rows)+"X"+str(cols))].keys())
+                                        sc = len(keysList)
+                                        seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+                                    except KeyError:
+                                        sc = 0
+                                        seeddict.setdefault((str(rows)+"X"+str(cols)), {})[sc] = seed
+                                    MyConfig.last_seeddict = seeddict
+                                    MyConfig.save()
+                                    print(seeddict)
+                                    mypath.append([1,startpos])
+                                    accessed_tiles.append([1,startpos])
+                                    globals.path_nmbr = 0
+                                    for i in range(rows * 2 + 1):
+                                        for j in range(cols * 2 + 1):
+                                            if sqmaze[i][j] == 1:
+                                                globals.path_nmbr = globals.path_nmbr + 1
+                                    display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                    pygame.event.clear(pygame.MOUSEBUTTONDOWN)
+                                    button.counter = 0
+
+                            # quit to main menu
+                            if buttons[2].clicked:
+                                # temp = rows
+                                # rows = cols
+                                # cols = temp
+                                # let us switch to the ingame level
+                                program_level = 'startscreen'
+                                globals.screen.fill((0,0,0)) # clean the ingame screen
+                                running = False
+                                
+                            # quit
+                            if buttons[3].clicked:
+                                MyConfig.last_seeddict = seeddict 
+                                MyConfig.save()
+                                running = False
+                                pygame.quit()
 
 if __name__ == "__main__":
     main()

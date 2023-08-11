@@ -296,6 +296,15 @@ def refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons,
     elif update == 1:
         pygame.display.update()
 
+def ingame_screen_speedrun(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles):
+    ingame_button_height = 30
+    buttons.append(Button('Restart',pygame.display.Info().current_w-180, 1*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Re-generate',pygame.display.Info().current_w-180, 2*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit to main menu',pygame.display.Info().current_w-180, 3*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    buttons.append(Button('Quit',pygame.display.Info().current_w-180, 4*(ingame_button_height + 10) + 90, 170, ingame_button_height))
+    refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, update, accessed_tiles)
+
+
 def display_mazecell(offset_x, offset_y, zoom, i, j, sqmaze, accessed_tiles):
     color = (0, 0, 0)
     if sqmaze[i][j] == 1:
