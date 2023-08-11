@@ -212,6 +212,7 @@ def main():
             # quit if quit button clickedcols
                 if startgame_quit:
                     pygame.quit()
+                    return
 
                 
             # let us switch to the ingame level
@@ -666,6 +667,7 @@ def main():
                                 MyConfig.save()
                                 running = False
                                 pygame.quit()
+                                return
 
                 elif globals.gamemode_text == globals.gamemode_speedrun:
                 # setting up the start ingame screen 
@@ -805,6 +807,7 @@ def main():
                                 MyConfig.save()
                                 running = False
                                 pygame.quit()
+                                return
 
 if __name__ == "__main__":
     main()
