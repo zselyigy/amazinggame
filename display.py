@@ -188,7 +188,38 @@ def solved_display():
     text_rect = text_surf.get_rect(center=rect.center)
     globals.screen.blit(text_surf, text_rect)
 
-def display_endgame():
+def display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath):
+    for i in range(2*rows+1):
+        for j in range(2*cols+1):
+            color = (0, 0, 0)
+            if sqmaze[i][j] == 1:
+                color = globals.path
+                try:
+                    tileindex = accessed_tiles.index([j, i])
+                    if globals.gamemode_text != globals.gamemode_speedrun:
+                        color = globals.alg_s
+                except ValueError:
+                    color = globals.path    
+                if globals.gamemode_text == globals.gamemode_speedrun:
+                    for r in range(0, len(mypath), 1):
+                        if sqmaze[mypath[0+r][1]][mypath[0+r][0]] != 3:
+                            sqmaze[mypath[0+r][1]][mypath[0+r][0]] = 5
+            elif sqmaze[i][j] == 2:
+                color = globals.sel_path
+            elif sqmaze[i][j] == 3:
+                color = globals.start_c
+            elif sqmaze[i][j] == 4:
+                color = globals.end_c
+            elif sqmaze[i][j] == 5:
+                color = globals.fin_path
+            elif sqmaze[i][j] == 6:
+                color = globals.alg_s
+
+            if color != (0, 0, 0):
+                pygame.draw.line(globals.screen, color,
+                    (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y - 0.5)),
+                    (globals.sc_x + zoom * (j - globals.mc_x + offset_x), globals.sc_y + zoom * (i - globals.mc_y + offset_y + 0.5)),
+                    zoom)
     textDisplay('Congratulation! You won!', 40, pygame.Rect(pygame.display.Info().current_w//4, pygame.display.Info().current_h//4 , pygame.display.Info().current_w//2, pygame.display.Info().current_h//4), (150, 00, 00), (255, 255, 255))
     textDisplay('Time: ' + str(globals.time), 20, pygame.Rect(10, 10, 170, 30), (50, 50, 50), (255, 255, 255))
 
@@ -242,9 +273,11 @@ def draw_sqmaze(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles):
         for j in range(2*cols+1):
             color = (0, 0, 0)
             if sqmaze[i][j] == 1:
-                color = globals.alg_s
+                color = globals.path
                 try:
                     tileindex = accessed_tiles.index([j, i])
+                    if globals.gamemode_text != globals.gamemode_speedrun:
+                        color = globals.alg_s
                 except ValueError:
                     color = globals.path          
             elif sqmaze[i][j] == 2:

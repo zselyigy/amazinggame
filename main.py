@@ -313,6 +313,7 @@ def main():
                                 elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
                                     zoom = max(1, zoom - 1)
                                     display.refresh_ingame_screen(sqmaze,  offset_x, offset_y, zoom, rows, cols, buttons, 0, accessed_tiles)
+                                # ARROWS
                                 elif (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN) and (globals.kbmaction_text == "Arrows"):
                                     if event.key == pygame.K_LEFT:
                                         xdir = -1
@@ -332,7 +333,6 @@ def main():
                                         if globals.timer_r == 0:
                                             globals.start_t = time.time()
                                             globals.timer_r = 1
-                                        sqmaze[mazey][mazex] = 2
                                         mypath.append([mazex,mazey])
                                         try:
                                             tileindex = accessed_tiles.index([mazex,mazey])
@@ -351,7 +351,7 @@ def main():
                                                     if sqmaze[i][j] == 2:
                                                         sqmaze[i][j] = 5
                                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                            display.display_endgame()
+                                            display.display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath)
 
                                             MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
                                             MyPlayer.save()
@@ -395,7 +395,7 @@ def main():
                                                                 if sqmaze[i][j] == 2:
                                                                     sqmaze[i][j] = 5
                                                         display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                                        display.display_endgame()
+                                                        display.display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath)
 
                                                         MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
                                                         MyPlayer.save()
@@ -456,7 +456,7 @@ def main():
                                                                             if sqmaze[i][j] == 2:
                                                                                 sqmaze[i][j] = 5
                                                                     display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                                                    display.display_endgame()
+                                                                    display.display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath)
 
                                                                     MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
                                                                     MyPlayer.save()
@@ -518,7 +518,7 @@ def main():
                                                                                     if sqmaze[i][j] == 2:
                                                                                         sqmaze[i][j] = 5
                                                                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                                                            display.display_endgame()
+                                                                            display.display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath)
 
                                                                             MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
                                                                             MyPlayer.save()
@@ -728,6 +728,8 @@ def main():
                                         if globals.timer_r == 0:
                                             globals.start_t = time.time()
                                             globals.timer_r = 1
+                                        if sqmaze[mypath[-1][1]][mypath[-1][0]] != 3:
+                                            sqmaze[mypath[-1][1], mypath[-1][0]]=1
                                         sqmaze[mazey][mazex] = 2
                                         mypath.append([mazex,mazey])
                                         try:
@@ -747,7 +749,7 @@ def main():
                                                     if sqmaze[i][j] == 2:
                                                         sqmaze[i][j] = 5
                                             display.refresh_ingame_screen(sqmaze, offset_x, offset_y, zoom, rows, cols, buttons, 1, accessed_tiles)
-                                            display.display_endgame()
+                                            display.display_endgame(sqmaze, offset_x, offset_y, zoom, rows, cols, accessed_tiles, mypath)
 
                                             MyPlayer.add_record(datetime.now(), cols, rows, globals.time)
                                             MyPlayer.save()
