@@ -161,9 +161,9 @@ def main():
 
 # Use this to set full screen
 # full screen
-#    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
+    screen = pygame.display.set_mode((pygame.display.Info().current_w, pygame.display.Info().current_h))
 # in window
-    screen = pygame.display.set_mode((800, 800))
+#    screen = pygame.display.set_mode((800, 800))
     globals.screen = screen
 # arrays for the main components 
     startscreen_buttons = []    # buttons
@@ -412,6 +412,10 @@ def main():
                                                                 match sqmaze[j][mazex]:
                                                                     case 0: # the next tile is wall, stop
                                                                         break
+                                                                    case 2: # the next tile is already in the path, stop
+                                                                        break
+                                                                    case 3: # the tile is the starttile
+                                                                        break
                                                                     case 4: # the tile is the endtile
                                                                         masolved = True
                                                                         break
@@ -471,6 +475,10 @@ def main():
                                                             for i in range(mypath[-1][0] + cds, mazex + cds, cds):
                                                                 match sqmaze[mazey][i]:
                                                                     case 0: # the next tile is wall, stop
+                                                                        break
+                                                                    case 2: # the next tile is already in the path, stop
+                                                                        break
+                                                                    case 3: # the tile is the starttile
                                                                         break
                                                                     case 1: # the tile is empty, we can move
                                                                         if globals.timer_r == 0:
